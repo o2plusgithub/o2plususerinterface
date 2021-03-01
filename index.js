@@ -76,8 +76,10 @@ var user_details_server = new Schema({
 
 
 app.get('/',function(req,res){
+  sess = req.session;
   sess.ipinfo = req.ipInfo;
   console.log(sess);
+  res.send("helloe");
 });
 
 app.listen(PORT, function() { console.log('listening')});
