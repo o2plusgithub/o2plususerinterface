@@ -77,15 +77,13 @@ var user_details_server = new Schema({
 
 app.get('/',function(req,res){
   sess = req.session;
-  sess.ipinfo = req.ipInfo;
-  console.log(sess);
+  sess.useripinfo = req.ipInfo;
+  /// reprase the encrypted string afterwards
+  sess.fingerprint = req.query.fingerprint;
+  sess.webview_version = req.query.webview_version;
   res.send("hello");
 });
 
-app.get('/willow',function(req,res){
-  sess.ipinfo1 = req.ipInfo;
-  console.log(sess);
-  res.send("hello");
-});
+
 
 app.listen(PORT, function() { console.log('listening')});
