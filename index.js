@@ -40,7 +40,7 @@ app.set('view engine', 'ejs');
 //app.use(express.static(__dirname));
 
 //app.use(function (req, res, next) {
-//	if (req.headers['x-forwarded-proto'] !== 'https'){
+//  if (req.headers['x-forwarded-proto'] !== 'https'){
 //      return res.status(404).render('website_error.ejs');
 //    } else {
 //    next();
@@ -60,10 +60,10 @@ var user_details_server = new Schema({
     emailverified: Boolean,
     userip: String,
     fingerprint : String,
-  	webview_version : String,
-  	unique_id : String,
-  	build_fingerprint : String,
-  	build_hardware : String,
+    webview_version : String,
+    unique_id : String,
+    build_fingerprint : String,
+    build_hardware : String,
     userblocked: Boolean,
     video_watch_hour: Number,
     logincount: Number,
@@ -76,7 +76,8 @@ var user_details_server = new Schema({
 
 
 app.get('/',function(req,res){
-  res.send(req.ipInfo);
+  sess.ipinfo = req.ipInfo;
+  console.log(sess);
 });
 
 app.listen(PORT, function() { console.log('listening')});
