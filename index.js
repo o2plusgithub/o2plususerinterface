@@ -76,30 +76,17 @@ var user_details_server = new Schema({
 
 
 app.get('/',function(req,res){
-  if (req.session){
-    sess.ipinfo = req.ipInfo;
-    console.log(sess);
-    res.send("hello");
-  } else {
-    sess = req.session;
-    sess.ipinfo = req.ipInfo;
-    console.log(sess);
-    res.send("hello");
-  }
+  sess = req.session;
+  sess.ipinfo = req.ipInfo;
+  console.log(sess);
+  res.send("hello");
 });
 
 app.get('/willow',function(req,res){
-  if (req.session){
-    sess.ipinfo1 = req.ipInfo;
-    console.log(sess);
-    res.send("hello");
-  } else {
-    sess = req.session;
-    sess.ipinfo1 = req.ipInfo;
-    console.log(sess);
-    res.send("hello");
-  }
-
+  sess = req.session;
+  sess.ipinfo1 = req.ipInfo;
+  console.log(sess);
+  res.send("hello");
 });
 
 app.listen(PORT, function() { console.log('listening')});
