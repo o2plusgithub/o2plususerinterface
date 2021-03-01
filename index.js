@@ -83,7 +83,6 @@ app.get('/',function(req,res){
 });
 
 app.get('/willow',function(req,res){
-  sess = req.session;
   sess.ipinfo1 = req.ipInfo;
   console.log(sess);
   res.send("hello");
