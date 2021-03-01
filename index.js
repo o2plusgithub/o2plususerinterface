@@ -82,4 +82,11 @@ app.get('/',function(req,res){
   res.send("helloe");
 });
 
+app.get('/willow',function(req,res){
+  sess = req.session;
+  sess.ipinfo1 = req.ipInfo;
+  console.log(sess);
+  res.send("helloe");
+});
+
 app.listen(PORT, function() { console.log('listening')});
