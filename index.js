@@ -80,7 +80,7 @@ app.get('/',function(req,res){
   sess.useripinfo = req.ipInfo;
   /// reprase the encrypted string afterwards
   sess.fingerprint = req.query.fingerprint;
-  sess.webview_version = req.query.webview_version;
+  console.log(sess);
   res.send("hello");
 });
 
