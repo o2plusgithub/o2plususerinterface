@@ -106,7 +106,7 @@ app.get('/registration_page', function(req, res) {
     // rememberto parse the token
     sess.unique_id = req.query.token;
     sess.useripinfo = req.ipInfo;
-    res.send(req.ipInfo);
+    //res.send(req.ipInfo);
     if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
       res.render("registration.ejs");
     } else {
