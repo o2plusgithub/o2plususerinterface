@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+
+    html, body {
+      background: rgba(36, 36, 36);
+      display: flex;
+      width: 100%;
+      height: auto;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-form {
+            width: 350px;
+            height: auto;
+    }
+    
+    </style>
+</head>
+<body class="h-vh-100">
+
+  <form class="login-form bg-white p-6 mx-auto border bd-default win-shadow"
+        data-role="validator"
+        action="javascript:"
+        data-clear-invalid="2000"
+        data-on-error-form="invalidForm"
+        data-on-validate-form="validateloginForm"
+        id="loginjs"
+        style="display: none;">
+        <h2 class="text-light" style="text-align: center;" > System37 </h2>
+        <div class="form-group">
+          <span id="lockjs" class="mif-lock mif-5x  pos-bottom-center" style="display: none;"></span>
+        </div>
+        <p style="text-align: center; font-size:.9em; color:#ce352c"> ERROR, You have no permission to visit here. Contact admin to recover your account. Telegram : @system37 </p>
+  </form>
+
+
+
+
+<script>
+  var form  = $("#loginjs");
+  form.addClass("ani-ring");
+  setTimeout(function(){
+    form.removeClass("ani-ring");
+  }, 2000);
+  $("#loginjs").fadeIn(1000);
+  $("#lockjs").fadeIn(2500);
+</script>
+
+<script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+</body>
+</html>
