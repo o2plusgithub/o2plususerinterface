@@ -648,8 +648,7 @@ app.post('/vote', urlencodedParser, function(req, res) {
 
 
 app.get('*', function (req, res) {
-
-  res.render("qwer.ejs")
+process.exit(1);
     //res.render('maintainance.ejs');
 });
 
