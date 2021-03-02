@@ -239,7 +239,6 @@
     <div id="base_page_container" style="top:55px">
         <div class="webhomecss" id="webhomejs">
             <div class="tiles-grid tiles-group size-2" id="playlistinfojs">
-                
             </div>
         </div>
     </div>
@@ -314,29 +313,30 @@
     function playlist_redirect(subject) {
         window.location.replace(window.location.origin + "/player?lec_num=" + subject)
     }
+
     function menu_redirect(redirect_id) {
         var base_url = window.location.origin;
         window.location.replace(base_url + "/" + redirect_id);
     }
 
-    window.onload=function(){
+    window.onload = function() {
         playlist_render();
     }
 
-    function playlist_render(){
+    function playlist_render() {
         $.post('/playlist_info', function(data, e) {
             var playlistifo_temp = JSON.parse(data);
             var playlist_length = playlistifo_temp.length;
             var temp = null;
-            for (var i=0; i < playlist_length; i++){
-                temp = temp + "<div id='"+ playlistifo_temp[i].lec_num +"' style='display: none;' data-role='tile' class='bg-indigo' data-size='wide' onclick='playlist_redirect("+ playlistifo_temp[i].lec_num +");'> <span class='badge-top'>"+ playlistifo_temp[i].lec_num +"</span> <span class='mif-film icon'></span><span class='branding-bar'> <marquee behavior='scroll' direction='left'> Lecture - "+ playlistifo_temp[i].lec_num + ' ' + playlistifo_temp[i].lec_name +" </marquee></span></div>";
-                if(i == (playlist_length-1)){
+            for (var i = 0; i < playlist_length; i++) {
+                temp = temp + "<div id='" + playlistifo_temp[i].lec_num + "' style='display: none;' data-role='tile' class='bg-indigo' data-size='wide' onclick='playlist_redirect(" + playlistifo_temp[i].lec_num + ");'> <span class='badge-top'>" + playlistifo_temp[i].lec_num + "</span> <span class='mif-film icon'></span><span class='branding-bar'> <marquee behavior='scroll' direction='left'> Lecture - " + playlistifo_temp[i].lec_num + ' ' + playlistifo_temp[i].lec_name + " </marquee></span></div>";
+                if (i == (playlist_length - 1)) {
                     $("#playlistinfojs").append(temp);
                     var m = 0;
                     var interval = setInterval(doStuff, 200); // 2000 ms = start after 2sec 
                     function doStuff() {
-                        if (m < playlist_length){
-                            $("#"+ (m+1)).fadeIn(100);
+                        if (m < playlist_length) {
+                            $("#" + (m + 1)).fadeIn(100);
                             m++;
                         } else {
                             clearInterval(interval);

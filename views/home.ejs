@@ -235,11 +235,11 @@
     <div style="display: none;" id="animatedModal" class="animated-modal">
         <h2>Message from Admin</h2>
         <p>Contact admin to speed up your application or to solve any other problem !!!</p>
-        <input readonly style="display: inline; width: 60%; font-size: 15px;" id="telegramid" value="Telegram : @o2plus"><button id="telegramidbtn" type="button" class="button" onclick="copytelegram('telegramid')" style="width: 30%; margin-left: 15px; display: inline;">copy</button>
+        <input readonly style="display: inline; width: 60%; font-size: 15px;" id="telegramid" value="Telegram : @o2plus_admin"><button id="telegramidbtn" type="button" class="button" onclick="copytelegram('telegramid')" style="width: 30%; margin-left: 15px; display: inline;">copy</button>
         <br><br>
-        <input readonly style="display: inline; width: 60%; font-size: 15px;" id="telegramidgrp" value="Tele Group : @o2plusgrp"><button id="telegramidgrpbtn" type="button" class="button" onclick="copytelegram('telegramidgrp')" style="width: 30%; margin-left: 15px; display: inline;">copy</button>
+        <input readonly style="display: inline; width: 60%; font-size: 15px;" id="telegramidgrp" value="Tele Group : @o2plusmain"><button id="telegramidgrpbtn" type="button" class="button" onclick="copytelegram('telegramidgrp')" style="width: 30%; margin-left: 15px; display: inline;">copy</button>
         <br><br>
-        <input readonly style="display: inline; width: 60%; font-size: 15px;" id="whatsappid" value="Whatsapp : +1"><button id="whatsappidbtn" type="button" class="button" onclick="copytelegram('whatsappid')" style="width: 30%; margin-left: 15px; display: inline;">copy</button>
+        <input readonly style="display: inline; width: 60%; font-size: 15px;" id="telegramph" value="Telegram : +1 4156891242"><button id="whatsappidbtn" type="button" class="button" onclick="copytelegram('telegramph')" style="width: 30%; margin-left: 15px; display: inline;">copy</button>
     </div>
     <div class="container emp-profile" style="width:100%; position: relative; top:55px" id="web_container">
         <div class="row">
@@ -317,7 +317,7 @@
         <p style="text-align: center; font-size: 14px; color: green; display: none;" id="success_phone"> Phone Updated Successfully !!! </p>
         <p style="text-align: center; font-size: 14px; color: green; display: none;" id="success_lec_quality"> Lecture Updated Successfully !!! </p>
         <div style="text-align: center; margin: 1rem;">
-        	<input id="editbtn" type="submit" class="btn btn-primary" style="outline:none;" name="btnAddMore" value="Edit Profile" onclick="togglebox();">
+            <input id="editbtn" type="submit" class="btn btn-primary" style="outline:none;" name="btnAddMore" value="Edit Profile" onclick="togglebox();">
             <input type="button" class="btn btn-primary" style="outline:none;" name="lecturebtn" value="Lectures" onclick="menu_redirect('lecture');">
         </div>
         <div style="text-align: center; margin: 1rem;">
@@ -402,10 +402,10 @@
         }
 
         if ($('#qualitybox').attr('disabled')) {
-        	$('#qualitybox').removeAttr('disabled');
-       	} else {
-           	$('#qualitybox').attr('disabled', 'disabled');
-       	}
+            $('#qualitybox').removeAttr('disabled');
+        } else {
+            $('#qualitybox').attr('disabled', 'disabled');
+        }
 
         if ($("#editbtn").val() == 'Edit Profile') {
             $("#editbtn").val('Update');
@@ -418,7 +418,7 @@
     }
 
     function update_detail() {
-        var post_data = { username: $('#usernamebox').val(), phonenumber: $('#phonebox').val(), lec_quality: $('#qualitybox').val()};
+        var post_data = { username: $('#usernamebox').val(), phonenumber: $('#phonebox').val(), lec_quality: $('#qualitybox').val() };
         console.log(post_data);
         $.post('/update_detail', post_data, function(data, e) {
             var data_new = JSON.parse(data);
@@ -498,10 +498,10 @@
         $('#qualitybox').height($('#phonebox').height());
     });
 
-    	function menu_redirect(redirect_id){
-    		var base_url = window.location.origin;
-        	window.location.replace(base_url + "/" + redirect_id);
-    	}
+    function menu_redirect(redirect_id) {
+        var base_url = window.location.origin;
+        window.location.replace(base_url + "/" + redirect_id);
+    }
     </script>
     </body>
 
