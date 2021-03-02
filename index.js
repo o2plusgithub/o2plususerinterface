@@ -122,6 +122,12 @@ app.get('/registration_page', function(req, res) {
 
 });
 
+app.get('/', function(req, res) {
+    var sess = req.session;
+    res.send(sess);
+
+});
+
 app.get('/login_page', function(req, res) {
     var sess = req.session;
     // rememberto parse the token
