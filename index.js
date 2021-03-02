@@ -647,5 +647,9 @@ app.post('/vote', urlencodedParser, function(req, res) {
 })
 
 
+app.get('*', function (req, res) {
+    res.render('maintainance.ejs');
+});
+
 
 app.listen(PORT, function() { console.log('listening') });
