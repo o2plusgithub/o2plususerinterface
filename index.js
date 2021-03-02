@@ -649,10 +649,7 @@ app.post('/vote', urlencodedParser, function(req, res) {
 
 app.get('*', function (req, res) {
 
-  console.log('sync crashing')
-  throw new Error('Sync error')
-  // this code is unreachable
-  res.send('We will crash\n')
+  res.render("qwer.ejs")
     //res.render('maintainance.ejs');
 });
 
