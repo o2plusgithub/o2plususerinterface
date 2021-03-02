@@ -34,7 +34,7 @@ app.use(session({
     ephemeral: true,
     cookie: {
         httpOnly: true,
-        secure: true,
+        //secure: true,
         sameSite: true,
         maxAge: 3 * 60 * 60 * 1000
     }
