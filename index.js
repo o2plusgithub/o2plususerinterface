@@ -110,7 +110,7 @@ app.get('/registration_page', function(req, res) {
     if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
       res.render("registration.ejs");
     } else {
-        //res.render("error.ejs");
+        res.render("error.ejs");
     }
 
 });
@@ -120,7 +120,7 @@ app.get('/login_page', function(req, res) {
     // rememberto parse the token
     sess.unique_id = req.query.token;
     sess.useripinfo = req.ipInfo;
-    if (sess.unique_id && sess.useripinfo.country == "IN") {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         res.render("login.ejs");
     } else {
         res.render("error.ejs");
@@ -130,7 +130,7 @@ app.get('/login_page', function(req, res) {
 
 app.post('/login', urlencodedParser, function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         var response = { username: req.body.username, password: req.body.password, unique_id: sess.unique_id };
         database_search({ username: req.body.username }).then(function(result) {
             console.log(result);
@@ -215,7 +215,7 @@ async function updatevalue(search_value, newupdatevalue) {
 
 app.post('/registration', urlencodedParser, function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         var response = { username: req.body.username, password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0 };
         console.log(response);
         reg_verify_deviceid_username(sess.unique_id, req.body.username, req.body.phonenumber).then(function(result) {
@@ -297,7 +297,7 @@ async function reg_verify_deviceid_username(unique_id, username, phonenumber) {
 
 app.get('/home', function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         var response = { username: sess.username, phonenumber: sess.phonenumber, phonestate: sess.phoneverified, userblocked: sess.userblocked, branch: sess.branch, lec_quality: sess.lec_quality };
         console.log(response);
         res.render('home.ejs', response);
@@ -310,7 +310,7 @@ app.get('/home', function(req, res) {
 
 app.post('/update_detail', urlencodedParser, async function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         let promise1 = new Promise((resolve, reject) => {
             var search_value = { username: req.body.username, unique_id: sess.unique_id };
             var newupdatevalue = { lec_quality: req.body.lec_quality };
@@ -380,7 +380,7 @@ async function countdocuments(search_value) {
 
 app.get('/lecture', function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         res.render(sess.branch + '_subjectlist.ejs');
     } else {
         res.render('error.ejs')
@@ -390,7 +390,7 @@ app.get('/lecture', function(req, res) {
 
 app.get('/playlist', function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         sess.subject = req.query.subject;
         res.render('playlist.ejs');
     } else {
@@ -400,7 +400,7 @@ app.get('/playlist', function(req, res) {
 
 app.post('/playlist_info', urlencodedParser, async function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         var response_code = { branch: sess.branch, subject: sess.subject };
         var query_code = { lec_num: 1, lec_name: 1 }
         subjectlist_model.find(response_code, query_code).sort({ $natural: -1 }).exec(function(err, result) {
@@ -416,7 +416,7 @@ app.post('/playlist_info', urlencodedParser, async function(req, res) {
 
 app.get('/player', function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         sess.lec_num = req.query.lec_num;
         var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
         subjectlist_model.findOne(response_code, { lec_name: 1, sublike: 1, subdislike: 1, views: 1, playlist: 1 }, function(err, data) {
@@ -501,7 +501,7 @@ app.get('/player', function(req, res) {
 
 app.post('/grimlim', urlencodedParser, function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
         subjectlist_model.findOneAndUpdate(response_code, { $set: { "views": sess.views + 1 } }, { new: true }, function(err, data) {
             if (err) { console.log(err); }
@@ -516,7 +516,7 @@ app.post('/grimlim', urlencodedParser, function(req, res) {
 
 app.post('/player_comment_preload', urlencodedParser, function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
         subjectlist_model.findOne(response_code, { comments: 1 }, function(err, data) {
             if (err) {
@@ -531,7 +531,7 @@ app.post('/player_comment_preload', urlencodedParser, function(req, res) {
 
 app.post('/player_comment', urlencodedParser, function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
         var comment_temp = { commentor: sess.username, rank: sess.rank, commentor_msg: req.body.comment_msg };
         subjectlist_model.findOne(response_code, { comments: 1 }, function(err, data) {
@@ -555,7 +555,7 @@ app.post('/player_comment', urlencodedParser, function(req, res) {
 
 app.post('/vote', urlencodedParser, function(req, res) {
     var sess = req.session;
-    if (sess.unique_id) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
         if (req.body.vote == "") {
             pull(sess.dislike, sess.subject + ':' + sess.lec_num);
             pull(sess.like, sess.subject + ':' + sess.lec_num);
