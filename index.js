@@ -42,7 +42,7 @@ app.use(session({
 app.use(expressip().getIpInfoMiddleware);
 app.set('view engine', 'ejs');
 
-app.use(helmet());
+//app.use(helmet());
 app.use(express.static(__dirname + '/views'));
 
 app.use(function (req, res, next) {
