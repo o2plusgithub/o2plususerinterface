@@ -14,17 +14,13 @@ var Schema = mongoose.Schema;
 const expressip = require('express-ip');
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('IPx3zITsOPot5Vq60Y6L');
-//
 var pull = require('array-pull');
 const ytdl = require('ytdl-core');
 var ytpl = require('ytpl');
 const getVideoId = require('get-video-id');
-///
-
 
 
 var app = express();
-
 
 app.use(session({
     secret: 'U5EAM0SCAD37CLjpLp7a',
@@ -40,8 +36,6 @@ app.use(session({
 }));
 app.use(expressip().getIpInfoMiddleware);
 app.set('view engine', 'ejs');
-
-
 
 app.use(
     helmet({
@@ -134,6 +128,50 @@ app.get('/login_page', function(req, res) {
     }
 });
 
+app.get('/stats', function(req, res) {
+    var sess = req.session;
+    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+        res.render('maintainance.ejs');
+    } else {
+        res.render("error.ejs");
+    }
+});
+
+app.get('/likes', function(req, res) {
+    var sess = req.session;
+    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+        res.render('maintainance.ejs');
+    } else {
+        res.render("error.ejs");
+    }
+});
+
+app.get('/qna', function(req, res) {
+    var sess = req.session;
+    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+        res.render('maintainance.ejs');
+    } else {
+        res.render("error.ejs");
+    }
+});
+
+app.get('/chats', function(req, res) {
+    var sess = req.session;
+    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+        res.render('maintainance.ejs');
+    } else {
+        res.render("error.ejs");
+    }
+});
+
+app.get('/materials', function(req, res) {
+    var sess = req.session;
+    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+        res.render('maintainance.ejs');
+    } else {
+        res.render("error.ejs");
+    }
+});
 
 app.post('/login', urlencodedParser, function(req, res) {
     var sess = req.session;
