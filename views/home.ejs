@@ -390,8 +390,7 @@
         $("#web_container").delay(400).fadeToggle(300);
         $("#menu_container").fadeToggle(300);
     }
-    </script>
-    <script type="text/javascript">
+
     function togglebox() {
 
         if (!<%=phonestate%>) {
@@ -417,8 +416,7 @@
         }
 
     }
-    </script>
-    <script type="text/javascript">
+
     function update_detail() {
         var post_data = { username: $('#usernamebox').val(), phonenumber: $('#phonebox').val(), lec_quality: $('#qualitybox').val()};
         console.log(post_data);
@@ -435,8 +433,7 @@
         })
 
     }
-    </script>
-    <script type="text/javascript">
+
     function readFile() {
         if (this.files && this.files[0]) {
             var FR = new FileReader();
@@ -453,8 +450,7 @@
         document.getElementById("profileimage").src = localStorage.getItem("profileimg");
     }
 
-    </script>
-    <script type="text/javascript">
+
     function copytelegram(copyidinfo) {
         var copyText = document.getElementById(copyidinfo);
         copyText.select();
@@ -470,8 +466,7 @@
         e.clipboardData.setData('text/plain', text[1]);
         e.preventDefault();
     });
-    </script>
-    <script>
+
     ////////////////// changes after window load ///////////////////////
 
     window.onload = function() {
@@ -495,17 +490,14 @@
         $('#qualitybox').height($('#phonebox').height());
 
     }
-    </script>
-    <script type="text/javascript">
+
     $(window).on("orientationchange", function(event) {
         $('#branchbox').width($('#phonebox').width());
         $('#branchbox').height($('#phonebox').height());
         $('#qualitybox').width($('#phonebox').width());
         $('#qualitybox').height($('#phonebox').height());
     });
-    </script>
 
-    <script type="text/javascript">
     	function menu_redirect(redirect_id){
     		var base_url = window.location.origin;
         	window.location.replace(base_url + "/" + redirect_id);
