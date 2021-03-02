@@ -648,7 +648,12 @@ app.post('/vote', urlencodedParser, function(req, res) {
 
 
 app.get('*', function (req, res) {
-    res.render('maintainance.ejs');
+
+  console.log('sync crashing')
+  throw new Error('Sync error')
+  // this code is unreachable
+  res.send('We will crash\n')
+    //res.render('maintainance.ejs');
 });
 
 
