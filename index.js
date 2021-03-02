@@ -27,7 +27,7 @@ app.use(session(
       httpOnly: true,
       secure: true,
       sameSite: true,
-      maxAge: 3*60*60*1000
+      maxAge: 10000
     }
   }
   )
@@ -79,9 +79,10 @@ app.get('/',function(req,res){
   sess = req.session;
   sess.useripinfo = req.ipInfo;
   /// reprase the encrypted string afterwards
-  sess.fingerprint = req.query.fingerprint;
   console.log(sess);
-  res.send("hello");
+  if(sess.useripinfo){
+    res.send("hello");
+  }
 });
 
 
