@@ -110,7 +110,7 @@ app.get('/registration_page', function(req, res) {
     if (sess.unique_id && (sess.useripinfo.country == "IN" ||  sess.useripinfo.country == "TR")) {
       res.render("registration.ejs");
     } else {
-        res.render("error.ejs");
+        //res.render("error.ejs");
     }
 
 });
