@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+    <script async src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js" onload="initFingerprintJS()"></script>
     <style>
         html, body {
       background: #242424;;
@@ -70,7 +71,27 @@
     <script>
     $(window).bind("load", function() {
         $("#registrationjs").delay(100).fadeIn(1000);
+        initFingerprintJS();
     })
+
+    function initFingerprintJS() {
+        FingerprintJS.load().then(fp => {
+            // The FingerprintJS agent is ready.
+            // Get a visitor identifier when you'd like to.
+            fp.get().then(result => {
+                // This is the visitor identifier:
+                const visitorId = result.visitorId;
+                const token = GetUrlParameter("token");
+                $.post('/visitorid', { token: token, visitorId: visitorId }, function(data, e) {
+                    var data_temp = JSON.parse(data);
+                    if (!data_temp.status) {
+                        var base_url = window.location.origin;
+                        window.location.replace(base_url + "/error/");
+                    }
+                })
+            });
+        });
+    }
 
     function GetUrlParameter(sParam) {
         var sPageURL = window.location.search.substring(1);

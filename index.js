@@ -102,6 +102,17 @@ var subjectlist_model = mongoose.model('subjectlist_model', subjectlist_server);
 mongoose.connect('mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/subjectlistdetails?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false });
 
 
+app.get('/', function(req, res) {
+    var sess = req.session;
+    var token = JSON.parse(cryptr.decrypt(req.query.token));
+    var past_time = token.timestamp;
+    var present_time = moment().format('x');
+    var time_diff = present_time - past_time;
+    var unique_id = token.unique_id;
+    var response = {time : time_diff, unique_id : unique_id};
+    res.send(response);
+});
+
 app.get('/registration_page', function(req, res) {
     var sess = req.session;
     // rememberto parse the token
@@ -127,6 +138,13 @@ app.get('/login_page', function(req, res) {
         res.render("error.ejs");
     }
 });
+
+app.post('/visitorid', urlencodedParser, function(req, res) {
+     var sess = req.session;
+     sess.fingerprint = req.body.visitorId;
+     var response = { status : true}
+     res.send(JSON.stringify(response));
+})
 
 app.get('/stats', function(req, res) {
     var sess = req.session;
@@ -425,7 +443,7 @@ async function countdocuments(search_value) {
 
 app.get('/lecture', function(req, res) {
     var sess = req.session;
-    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")){
         res.render(sess.branch + '_subjectlist.ejs');
     } else {
         res.render('error.ejs')
@@ -527,13 +545,13 @@ app.get('/player', function(req, res) {
 
                     if (sess.like.includes(sess.subject + ':' + sess.lec_num)) {
                         var like_status = true;
-                        res.render('player.ejs', { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', {  username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     } else if (sess.dislike.includes(sess.subject + ':' + sess.lec_num)) {
                         var like_status = false;
-                        res.render('player.ejs', { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', {  username : sess.username, phonenumber : sess.phonenumber,  branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     } else {
                         var like_status = '';
-                        res.render('player.ejs', { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', {  username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     }
                 }).catch(error => { console.log(error); return error });
             }).catch(error => { console.log(error); return error });
@@ -647,9 +665,8 @@ app.post('/vote', urlencodedParser, function(req, res) {
 })
 
 
-app.get('*', function (req, res) {
-process.exit(1);
-    //res.render('maintainance.ejs');
+app.get('*', function(req, res) {
+    res.render('maintainance.ejs');
 });
 
 
