@@ -105,6 +105,7 @@ mongoose.connect('mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2p
 app.get('/', function(req, res) {
     var sess = req.session;
     var token = JSON.parse(cryptr.decrypt(req.query.token));
+    console.log(token);
     var past_time = token.timestamp;
     var present_time = moment().format('x');
     var time_diff = present_time - past_time;
