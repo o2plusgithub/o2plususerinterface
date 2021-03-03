@@ -392,9 +392,25 @@
     }
 
 window.addEventListener('load', (event) => {
-    alert(<%=phonestate%>);
-    alert("hew");
-});
+	alert('<%= username %>');
+        $("#username_tophead").text('<%= username %>');
+        $("#usernamebox").val('<%= username %>');
+        $("#branchbox").val('<%= branch %>');
+        $("#phonebox").val('<%= phonenumber %>');
+        $("#qualitybox").val('<%= lec_quality %>');
+        if (<%= userblocked %>) {
+            $('#application_status').val('Under Review');
+            $('#application_status').css('color', 'red');
+            $("#contact_admin-button").trigger("click");
+        } else {
+            $('#application_status').val('Approved');
+            $('#application_status').css('color', 'green');
+        }
+
+        $('#branchbox').width($('#phonebox').width());
+        $('#branchbox').height($('#phonebox').height());
+        $('#qualitybox').width($('#phonebox').width());
+        $('#qualitybox').height($('#phonebox').height());});
     
 
     function togglebox() {
@@ -474,26 +490,6 @@ window.addEventListener('load', (event) => {
     });
 
     ////////////////// changes after window load ///////////////////////
-
-        $("#username_tophead").text('<%= username %>');
-        $("#usernamebox").val('<%= username %>');
-        $("#branchbox").val('<%= branch %>');
-        $("#phonebox").val('<%= phonenumber %>');
-        $("#qualitybox").val('<%= lec_quality %>');
-        if (<%= userblocked %>) {
-            $('#application_status').val('Under Review');
-            $('#application_status').css('color', 'red');
-            $("#contact_admin-button").trigger("click");
-        } else {
-            $('#application_status').val('Approved');
-            $('#application_status').css('color', 'green');
-        }
-
-        $('#branchbox').width($('#phonebox').width());
-        $('#branchbox').height($('#phonebox').height());
-        $('#qualitybox').width($('#phonebox').width());
-        $('#qualitybox').height($('#phonebox').height());
-
 
 
 
