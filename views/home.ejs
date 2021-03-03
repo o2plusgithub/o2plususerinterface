@@ -392,7 +392,6 @@
     }
     // window.onload does not work in webview
     window.addEventListener('load', (event) => {
-        alert('<%= username %>');
         $("#username_tophead").text('<%= username %>');
         $("#usernamebox").val('<%= username %>');
         $("#branchbox").val('<%= branch %>');
