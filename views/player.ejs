@@ -465,7 +465,7 @@
     </script>
     <script type="text/javascript">
     var vid = document.getElementById("videoplayer");
-    window.onload = function() {
+    window.addEventListener('load', (event) => {
         $.getJSON('https://api.ipify.org/?format=json', function(data) {
             var userip = data.ip;
             $.getJSON('https://api.allorigins.win/get?url=' + encodeURIComponent('https://proxycheck.io/v2/' + userip + '?vpn=1&asn=1'), function(data) {

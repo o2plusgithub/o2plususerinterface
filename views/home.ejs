@@ -390,9 +390,9 @@
         $("#web_container").delay(400).fadeToggle(300);
         $("#menu_container").fadeToggle(300);
     }
-
-window.addEventListener('load', (event) => {
-	alert('<%= username %>');
+    // window.onload does not work in webview
+    window.addEventListener('load', (event) => {
+        alert('<%= username %>');
         $("#username_tophead").text('<%= username %>');
         $("#usernamebox").val('<%= username %>');
         $("#branchbox").val('<%= branch %>');
@@ -410,8 +410,9 @@ window.addEventListener('load', (event) => {
         $('#branchbox').width($('#phonebox').width());
         $('#branchbox').height($('#phonebox').height());
         $('#qualitybox').width($('#phonebox').width());
-        $('#qualitybox').height($('#phonebox').height());});
-    
+        $('#qualitybox').height($('#phonebox').height());
+    });
+
 
     function togglebox() {
 

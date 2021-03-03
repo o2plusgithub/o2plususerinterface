@@ -319,7 +319,7 @@
         window.location.replace(base_url + "/" + redirect_id);
     }
 
-    window.onload = function() {
+    window.addEventListener('load', (event) => {
         playlist_render();
     }
 

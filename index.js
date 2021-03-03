@@ -119,7 +119,6 @@ app.get('/registration_page', function(req, res) {
 
 app.get('/login_page', function(req, res) {
     var sess = req.session;
-
     sess.useripinfo = req.ipInfo;
     if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
         res.render("login.ejs");
