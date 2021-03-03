@@ -109,6 +109,7 @@ app.get('/registration_page', function(req, res) {
     var token = JSON.parse(cryptr.decrypt(req.query.token));
     var past_time = token.timestamp;
     var present_time = moment().format('x');
+    console.log(past_time + " : " + present_time);
     var time_diff = present_time - past_time;
     sess.useripinfo = req.ipInfo;
     //res.send(req.ipInfo);
