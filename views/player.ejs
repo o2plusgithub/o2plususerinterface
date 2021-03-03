@@ -324,7 +324,7 @@
         <div style="width: 100%; float: none; padding: 30px; text-align: center;">
             <div style="text-align: center; font-size: 20px; color: #a9a9a9;">
                 <span id="viewcount">
-                    <%=views%></span> views
+                    <%=views%></span> 
             </div>
             <div style=" margin-top: 10px; margin-bottom: 10px; height: 3px; width: 100%; background-color: #eceff0;">
                 <div id="progress_bar" style="height: 3px; background-color: #28b47e;">
@@ -466,8 +466,8 @@
     <script type="text/javascript">
     var vid = document.getElementById("videoplayer");
     window.addEventListener('load', (event) => {
-        $.getJSON('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.ipify.org/?format=json'), function(data) {
-            var userip = data.ip;
+        
+            var userip = "<%= ip_address %>";
             $.getJSON('https://api.allorigins.win/get?url=' + encodeURIComponent('https://proxycheck.io/v2/' + userip + '?vpn=1&asn=1'), function(data) {
                 var ip = userip;
                 var ip_info = JSON.parse(data.contents)[ip];
@@ -511,7 +511,7 @@
                     window.location.replace(base_url + "/error");
                 }
             });
-        });
+        
         $("#videoplayer").append("<div class='watermark_canvas' aria-live='off' aria-atomic='true'><div id='water-id' style='style='letter-spacing: 8px; font-size: 20px; position: absolute; top: 34%; left:76%; background-color: black; display: none;'>357446</div></div>");
         $("#videoplayer").append("<div class='watermark_canvas' aria-live='off' aria-atomic='true' style='display: none; overflow: hidden; height: 100%;background-color: rgba(0,0,0,0.5);' id='warning_overflow'> <div class='row md-4' style='position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: black;'> <div class='col-xs-12 col-sm-12'> <div class='card border-dark rounded' style='background-color: #f5f5f5;'> <div class='card-body'> <h5 class='card-title'>Card title</h5> <p class='card-text'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu sem tempor.</p> <a href='#' class='btn btn-primary'>Know more</a> </div> </div> <div class='col-xs-3 col-sm-3'></div> </div></div>");
         $('.vjs-picture-in-picture-control').hide();

@@ -532,13 +532,13 @@ app.get('/player', function(req, res) {
 
                     if (sess.like.includes(sess.subject + ':' + sess.lec_num)) {
                         var like_status = true;
-                        res.render('player.ejs', {  username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', { ip_address : sess.useripinfo.ip , username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     } else if (sess.dislike.includes(sess.subject + ':' + sess.lec_num)) {
                         var like_status = false;
-                        res.render('player.ejs', {  username : sess.username, phonenumber : sess.phonenumber,  branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', { ip_address : sess.useripinfo.ip , username : sess.username, phonenumber : sess.phonenumber,  branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     } else {
                         var like_status = '';
-                        res.render('player.ejs', {  username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', { ip_address : sess.useripinfo.ip , username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     }
                 }).catch(error => { console.log(error); return error });
             }).catch(error => { console.log(error); return error });
