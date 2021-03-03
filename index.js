@@ -102,25 +102,18 @@ var subjectlist_model = mongoose.model('subjectlist_model', subjectlist_server);
 mongoose.connect('mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/subjectlistdetails?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false });
 
 
-app.get('/', function(req, res) {
-    var sess = req.session;
-    var token = JSON.parse(cryptr.decrypt(req.query.token));
-    console.log(token);
-    var past_time = token.timestamp;
-    var present_time = moment().format('x');
-    var time_diff = present_time - past_time;
-    var unique_id = token.unique_id;
-    var response = {time : time_diff, unique_id : unique_id};
-    res.send(response);
-});
 
 app.get('/registration_page', function(req, res) {
     var sess = req.session;
     // rememberto parse the token
-    sess.unique_id = req.query.token;
+    var token = JSON.parse(cryptr.decrypt(req.query.token));
+    var past_time = token.timestamp;
+    var present_time = moment().format('x');
+    var time_diff = present_time - past_time;
     sess.useripinfo = req.ipInfo;
     //res.send(req.ipInfo);
-    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+    if ((sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR") && time_diff < 1000000) {
+        sess.unique_id = token.unique_id;
         res.render("registration.ejs");
     } else {
         res.render("error.ejs");
@@ -130,8 +123,7 @@ app.get('/registration_page', function(req, res) {
 
 app.get('/login_page', function(req, res) {
     var sess = req.session;
-    // rememberto parse the token
-    sess.unique_id = req.query.token;
+
     sess.useripinfo = req.ipInfo;
     if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
         res.render("login.ejs");
