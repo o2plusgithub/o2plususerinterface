@@ -467,7 +467,11 @@
     </script>
     <script type="text/javascript">
 var myScreenOrientation = window.screen.orientation;
-myScreenOrientation.lock("portrait");
+myScreenOrientation.lock("portrait")
+.then(
+    success => console.log(success),
+    failure => console.log(failure)
+    )
 
     var vid = document.getElementById("videoplayer");
     window.addEventListener('load', (event) => {
