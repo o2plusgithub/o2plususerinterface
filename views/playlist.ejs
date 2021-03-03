@@ -319,7 +319,9 @@
         window.location.replace(base_url + "/" + redirect_id);
     }
 
-    playlist_render();
+    window.addEventListener('load', (event) => {
+        playlist_render();
+    })
 
 
     function playlist_render() {
