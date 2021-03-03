@@ -391,8 +391,11 @@
         $("#menu_container").fadeToggle(300);
     }
 
+window.addEventListener('load', (event) => {
     alert(<%=phonestate%>);
     alert("hew");
+});
+    
 
     function togglebox() {
 
@@ -472,7 +475,6 @@
 
     ////////////////// changes after window load ///////////////////////
 
-    window.onload = function() {
         $("#username_tophead").text('<%= username %>');
         $("#usernamebox").val('<%= username %>');
         $("#branchbox").val('<%= branch %>');
@@ -492,7 +494,9 @@
         $('#qualitybox').width($('#phonebox').width());
         $('#qualitybox').height($('#phonebox').height());
 
-    }
+
+
+
 
     $(window).on("orientationchange", function(event) {
         $('#branchbox').width($('#phonebox').width());
