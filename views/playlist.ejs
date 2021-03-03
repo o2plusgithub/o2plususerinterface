@@ -311,7 +311,8 @@
     }
 
     function playlist_redirect(subject) {
-        window.location.replace(window.location.origin + "/player?lec_num=" + subject)
+        var base_url = window.location.origin;
+        window.location.replace(base_url + "/player?lec_num=" + subject)
     }
 
     function menu_redirect(redirect_id) {
