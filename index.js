@@ -23,15 +23,15 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var app = express();
 
 var store = new MongoDBStore({
-  uri: 'mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/userSessions?retryWrites=true&w=majority',
-  collection: 'userSessions',
-  expires: 1000 * 60 * 60 * 24 * 30, // expire in mongo 4hrs
+    uri: 'mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/userSessions?retryWrites=true&w=majority',
+    collection: 'userSessions',
+    expires: 1000 * 60 * 60 * 24 * 30, // expire in mongo 4hrs
 });
- 
+
 // Catch errors
 store.on('error', function(error) {
-  console.log('CANT CONNECT TO MongoDBStore !!!');
-  console.log(error);
+    console.log('CANT CONNECT TO MongoDBStore !!!');
+    console.log(error);
 });
 
 app.use(session({
@@ -143,10 +143,10 @@ app.get('/login_page', function(req, res) {
 });
 
 app.post('/visitorid', urlencodedParser, function(req, res) {
-     var sess = req.session;
-     sess.fingerprint = req.body.visitorId;
-     var response = { status : true}
-     res.send(JSON.stringify(response));
+    var sess = req.session;
+    sess.fingerprint = req.body.visitorId;
+    var response = { status: true }
+    res.send(JSON.stringify(response));
 })
 
 app.get('/stats', function(req, res) {
@@ -446,7 +446,7 @@ async function countdocuments(search_value) {
 
 app.get('/lecture', function(req, res) {
     var sess = req.session;
-    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")){
+    if (sess.unique_id && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
         res.render(sess.branch + '_subjectlist.ejs');
     } else {
         res.render('error.ejs')
@@ -497,64 +497,28 @@ app.get('/player', function(req, res) {
                 ytdl.getInfo(video_url_id).then(info_data => {
 
                     vid_container = [];
-                    if (sess.lec_quality == 'lowest') {
-                        for (var i = 0; i < info_data.formats.length; i++) {
-                            if (info_data.formats[i].qualityLabel == '360p' && info_data.formats[i].container == 'mp4' && info_data.formats[i].hasVideo == true && info_data.formats[i].hasAudio == false) {
-                                vid_container.push(info_data.formats[i]);
-                            }
-                            if (i == info_data.formats.length - 1) {
-                                let formatv = vid_container[0];
-                                let formata = ytdl.chooseFormat(info_data.formats, { quality: 'lowestaudio' });
-                                sess.videolink = formatv.url;
-                                sess.audiolink = formata.url;
-                                console.log(sess);
-                            }
+                    for (var i = 0; i < info_data.formats.length; i++) {
+                        if (info_data.formats[i].hasVideo == true && info_data.formats[i].hasAudio == true) {
+                            vid_container.push(info_data.formats[i]);
                         }
-                    } else if (sess.lec_quality == 'high') {
-                        for (var i = 0; i < info_data.formats.length; i++) {
-                            if (info_data.formats[i].qualityLabel == '720p' && info_data.formats[i].container == 'mp4' && info_data.formats[i].hasVideo == true && info_data.formats[i].hasAudio == false) {
-                                vid_container.push(info_data.formats[i]);
-                            }
-                            if (i == info_data.formats.length - 1) {
-                                let formatv = vid_container[0];
-                                let formata = ytdl.chooseFormat(info_data.formats, { quality: 'highestaudio' });
-                                sess.videolink = formatv.url;
-                                sess.audiolink = formata.url;
-                                console.log(sess);
-                            }
+                        if (i == info_data.formats.length - 1) {
+                            let formatv = vid_container[0];
+                            let formata = '';
+                            sess.videolink = formatv.url;
+                            sess.audiolink '';
+                            console.log(sess);
                         }
-                    } else if (sess.lec_quality == 'medium') {
-                        for (var i = 0; i < info_data.formats.length; i++) {
-                            if (info_data.formats[i].qualityLabel == '480p' && info_data.formats[i].container == 'mp4' && info_data.formats[i].hasVideo == true && info_data.formats[i].hasAudio == false) {
-                                vid_container.push(info_data.formats[i]);
-                            }
-                            if (i == info_data.formats.length - 1) {
-                                let formatv = vid_container[0];
-                                let formata = ytdl.chooseFormat(info_data.formats, { quality: 'lowestaudio' });
-                                sess.videolink = formatv.url;
-                                sess.audiolink = formata.url;
-                                console.log(sess);
-                            }
-                        }
-                    } else {
-                        let formatv = ytdl.chooseFormat(info_data.formats, { quality: 'highestvideo' });
-                        let formata = ytdl.chooseFormat(info_data.formats, { quality: 'highestaudio' });
-                        sess.videolink = formatv.url;
-                        sess.audiolink = formata.url;
-                        console.log(sess);
                     }
-
-
 
                     if (sess.like.includes(sess.subject + ':' + sess.lec_num)) {
                         var like_status = true;
-                        res.render('player.ejs', { ip_address : sess.useripinfo.ip , username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', { ip_address: sess.useripinfo.ip, username: sess.username, phonenumber: sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     } else if (sess.dislike.includes(sess.subject + ':' + sess.lec_num)) {
                         var like_status = false;
-                        res.render('player.ejs', { ip_address : sess.useripinfo.ip , username : sess.username, phonenumber : sess.phonenumber,  branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', { ip_address: sess.useripinfo.ip, username: sess.username, phonenumber: sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     } else {
                         var like_status = '';
-                        res.render('player.ejs', { ip_address : sess.useripinfo.ip , username : sess.username, phonenumber : sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                        res.render('player.ejs', { ip_address: sess.useripinfo.ip, username: sess.username, phonenumber: sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
                     }
                 }).catch(error => { console.log(error); return error });
             }).catch(error => { console.log(error); return error });
