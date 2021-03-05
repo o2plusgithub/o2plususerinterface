@@ -503,9 +503,9 @@ app.get('/player', function(req, res) {
                         }
                         if (i == info_data.formats.length - 1) {
                             let formatv = vid_container[0];
-                            let formata = '';
+                            let formata = vid_container[0];
                             sess.videolink = formatv.url;
-                            sess.audiolink '';
+                            sess.audiolink = formata.url;
                             console.log(sess);
                         }
                     }
