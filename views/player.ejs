@@ -487,7 +487,7 @@
                         if (document.getElementById("videoplayer_html5_api")) {
                             document.querySelector("#videoplayer_html5_api").src = data_temp.fv; //.replace(/amp;/g, "");
                             document.querySelector("#videoplayer_html5_api").load();
-                            document.querySelector("#audioplayer").src = data_temp.fa; //.replace(/amp;/g, "");
+                            document.querySelector("#audioplayer").src = ''; //.replace(/amp;/g, "");
                             document.querySelector("#audioplayer").load();
                             document.querySelector('#videoplayer_html5_api').addEventListener('loadeddata', function() {
                                 document.querySelector("#videoplayer_html5_api").removeAttribute("src");
