@@ -18,7 +18,7 @@ var pull = require('array-pull');
 const ytdl = require('ytdl-core');
 var ytpl = require('ytpl');
 const getVideoId = require('get-video-id');
-
+var MongoDBStore = require('connect-mongodb-session')(session);
 
 var app = express();
 
@@ -30,7 +30,7 @@ var store = new MongoDBStore({
  
 // Catch errors
 store.on('error', function(error) {
-  console.log(""CANT CONNECT TO MongoDBStore');
+  console.log('CANT CONNECT TO MongoDBStore !!!');
   console.log(error);
 });
 
