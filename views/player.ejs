@@ -275,8 +275,6 @@
                 </video>
             </div>
         </div>
-        <audio id='audioplayer' style="display: none;">
-            <source src='/test.mp4' type="audio/mpeg"> Your browser does not support the audio element.</audio>
         <p style="color: #ea2c5a; text-align: center; padding-top: 22px; font-size: 22px"><span id="lec_name_container"></span></p>
         <div class="container-fluid" id="icon_container" style="border-bottom-width: 1px; border-bottom-color: #424242; border-bottom-style: solid;">
             <div class="container">
@@ -487,19 +485,10 @@
                         if (document.getElementById("videoplayer_html5_api")) {
                             document.querySelector("#videoplayer_html5_api").src = data_temp.fv; //.replace(/amp;/g, "");
                             document.querySelector("#videoplayer_html5_api").load();
-                            document.querySelector("#audioplayer").src = ''; //.replace(/amp;/g, "");
-                            document.querySelector("#audioplayer").load();
                             document.querySelector('#videoplayer_html5_api').addEventListener('loadeddata', function() {
                                 document.querySelector("#videoplayer_html5_api").removeAttribute("src");
-                                document.querySelector("#audioplayer").removeAttribute("src");
                                 document.querySelector("#videoplayer_html5_api").play();
                                 document.querySelector("#videoplayer_html5_api").currentTime = 1;
-                                document.querySelector("#videoplayer_html5_api").onpause = function() {
-                                    //$("#water-id").hide();
-                                };
-                                document.querySelector("#videoplayer_html5_api").onplay = function() {
-                                    //$("#water-id").show();
-                                };
                             }, false);
 
                             //setTimeout(function() {
@@ -708,55 +697,6 @@
     }
     </script>
     <script>
-    var A = document.getElementById("videoplayer_html5_api");
-    var B = document.getElementById("audioplayer");
-
-
-
-    A.onvolumechange = function() {
-        var temp_vol = A.volume;
-        B.volume = temp_vol;
-    };
-
-
-
-
-
-
-    A.addEventListener("play", function() {
-        if (A.readyState != 4 || B.readyState != 4) {
-            B.pause();
-            A.pause();
-        } else if (A.readyState == 4 && B.readyState == 4 && A.currentTime > 0 && B.currentTime > 0) {
-            B.play();
-        } else {
-            B.play();
-            B.currentTime = 0;
-            A.currentTime = 0;
-            console.log(B.currentTime - A.currentTime);
-        }
-    });
-
-    A.addEventListener("pause", function() {
-        B.pause();
-    });
-
-    A.addEventListener("seeking", function() {
-        B.currentTime = A.currentTime;
-    });
-
-    A.addEventListener("seeked", function() {
-        B.currentTime = A.currentTime;
-    });
-
-
-    A.onwaiting = function() {
-        B.pause();
-    };
-
-    A.onplaying = function() {
-        B.play();
-    };
 
     function sweetalert_test() {
 
