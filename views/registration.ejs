@@ -71,7 +71,7 @@
     </form>
     <script>
     $(window).bind("load", function() {
-        $("#registrationjs").delay(100).fadeIn(200);
+        $("#registrationjs").delay(100).fadeIn(1000);
         initFingerprintJS();
     })
 
@@ -131,10 +131,7 @@
                 setTimeout(function() {
                     $("#newuserregjs").fadeIn(1000);
                     $("#newuserregjs").delay(4000).fadeOut(1000);
-                    setTimeout(function{
-                        loginredirectjs();
-                    }, 5000)
-                }, 500);
+                }, 5000);
             } else {
                 if (data_json.form_dupname) {
                     form.addClass("ani-ring");
