@@ -118,12 +118,11 @@ app.get('/registration_page', function(req, res) {
     var token = JSON.parse(cryptr.decrypt(req.query.token));
     var past_time = token.timestamp;
     var present_time = moment().format('x');
-    console.log(past_time + " : " + present_time);
     var time_diff = present_time - past_time;
     sess.useripinfo = req.ipInfo;
     //res.send(req.ipInfo);
-    console.log(time_diff);
-    if ((sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
+    console.log("time difference is "+time_diff);
+    if ((time_diff <= 5000) && (sess.useripinfo.country == "IN" || sess.useripinfo.country == "TR")) {
         sess.unique_id = token.unique_id;
         res.render("registration.ejs");
     } else {
