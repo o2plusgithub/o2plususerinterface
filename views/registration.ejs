@@ -130,7 +130,10 @@
             if (data_json.form_success) {
                 setTimeout(function() {
                     $("#newuserregjs").fadeIn(1000);
-                    $("#newuserregjs").delay(4000).fadeOut(1000);
+                    $("#newuserregjs").delay(2000).fadeOut(1000);
+                    setTimeout(function(){
+                        loginredirectjs()
+                    }, 3000)
                 }, 5000);
             } else {
                 if (data_json.form_dupname) {
