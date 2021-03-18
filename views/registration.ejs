@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
-    <link rel="manifest" href="manifest.json">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
-    <script async src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js" onload="initFingerprintJS()"></script>
     <style>
-        html, body {
+    html, body {
       background: #242424;;
       display: flex;
       width: 100%;
@@ -28,8 +26,8 @@
 
 <body class="h-vh-100">
     <form class="login-form bg-white p-6 mx-auto border bd-default win-shadow" data-role="validator" action="javascript:" data-clear-invalid="2000" data-on-error-form="invalidForm" data-on-validate-form="validateregForm" id="registrationjs" style="display: none;">
-        <span id="linuxjs" class="mif-linux mif-6x place-right" style="margin-top: 5px; right: 1%;"></span>
-        <h2 class="text-light"> 02Plus </h2>
+        <span id="linuxjs" class="mif-paper-plane fg-blue mif-6x place-right" style="margin-top: 5px; right: 1%;"></span>
+        <h2> 02Plus </h2>
         <hr class="thin mt-4 mb-4 bg-white">
         <div class="form-group">
             <input type="text" data-role="input" data-prepend="<span class='mif-user'>" placeholder="Username" data-validate="required minlength=5" name="username">
@@ -61,54 +59,17 @@
         <p style="text-align: center; font-size:.9em; color:#ce352c; display: none;" id="dupuserjs"> Duplicate username found !!! </p>
         <p style="text-align: center; font-size:.9em; color:#ce352c; display: none;" id="dupdevjs"> Duplicate device found !!! </p>
         <p style="text-align: center; font-size:.9em; color:#ce352c; display: none;" id="dupphonejs"> Duplicate phone or email found !!! </p>
-        <p style="text-align: center; font-size:.9em; color: green; display: none;" id="newuserregjs"> Congrats, You are registered !!! </p>
         <p style="text-align: center; font-size:.9em; color:#ce352c; display: none;" id="serverissueregjs"> Server issue, Please try again !!! </p>
+        <p style="text-align: center; font-size:.9em; color: green; display: none;" id="newuserregjs"> Congrats, You are registered !!! </p>
         <div class="form-group mt-10">
             <input type="checkbox" data-role="checkbox" data-caption="Remember me" class="place-right">
             <button type="submit" class="button">Register</button>
         </div>
-        <p class="text-light" style="text-align: center;">Already have an account? <a href="javascript:loginredirectjs();">Sign In</a>.</p>
     </form>
     <script>
     $(window).bind("load", function() {
-        $("#registrationjs").delay(100).fadeIn(1000);
-        initFingerprintJS();
+        $("#registrationjs").fadeIn(200);
     })
-
-    function initFingerprintJS() {
-        FingerprintJS.load().then(fp => {
-            // The FingerprintJS agent is ready.
-            // Get a visitor identifier when you'd like to.
-            fp.get().then(result => {
-                // This is the visitor identifier:
-                const visitorId = result.visitorId;
-                const token = GetUrlParameter("token");
-                $.post('/visitorid', { token: token, visitorId: visitorId }, function(data, e) {
-                    var data_temp = JSON.parse(data);
-                    if (!data_temp.status) {
-                        var base_url = window.location.origin;
-                        window.location.replace(base_url + "/error/");
-                    }
-                })
-            });
-        });
-    }
-
-    function GetUrlParameter(sParam) {
-        var sPageURL = window.location.search.substring(1);
-        var sURLVariables = sPageURL.split('&');
-        for (var i = 0; i < sURLVariables.length; i++) {
-            var sParameterName = sURLVariables[i].split('=');
-            if (sParameterName[0] == sParam) {
-                return sParameterName[1];
-            }
-        }
-    }
-
-    function loginredirectjs() {
-        var base_url = window.location.origin;
-        window.location.replace(base_url + "/login_page?token=" + GetUrlParameter("token"));
-    }
 
 
     function invalidForm() {
@@ -120,21 +81,26 @@
     }
 
 
+    function firstregjs() {
+        var base_url = window.location.origin;
+        window.location.replace(base_url + "/first_time_registration");
+    }
+
+
 
     function validateregForm() {
         var form = $('#registrationjs');
-        post_data = $("#registrationjs").serializeArray();
-        console.log(post_data);
+        var post_data = $("#registrationjs").serializeArray();
         $.post('/registration', post_data, function(data, e) {
-            data_json = JSON.parse(data);
+            var data_json = JSON.parse(data);
             if (data_json.form_success) {
                 setTimeout(function() {
                     $("#newuserregjs").fadeIn(1000);
-                    $("#newuserregjs").delay(2000).fadeOut(1000);
+                    $("#newuserregjs").delay(1000).fadeOut(1000);
                     setTimeout(function(){
-                        loginredirectjs()
+                        firstregjs();
                     }, 3000)
-                }, 5000);
+                }, 100);
             } else {
                 if (data_json.form_dupname) {
                     form.addClass("ani-ring");
@@ -142,7 +108,7 @@
                         $("#dupuserjs").fadeIn(1000);
                         setTimeout(function() {
                             $("#dupuserjs").fadeOut(1000);
-                        }, 10000);
+                        }, 5000);
                         form.removeClass("ani-ring");
                     }, 100);
                 } else {
@@ -152,7 +118,7 @@
                             $("#dupphonejs").fadeIn(1000);
                             setTimeout(function() {
                                 $("#dupphonejs").fadeOut(1000);
-                            }, 10000);
+                            }, 5000);
                             form.removeClass("ani-ring");
                         }, 100);
                     } else {
@@ -162,7 +128,7 @@
                                 $("#dupdevjs").fadeIn(1000);
                                 setTimeout(function() {
                                     $("#dupdevjs").fadeOut(1000);
-                                }, 10000);
+                                }, 5000);
                                 form.removeClass("ani-ring");
                             }, 100);
                         } else {
@@ -171,7 +137,7 @@
                                 $("#serverissueregjs").fadeIn(1000);
                                 setTimeout(function() {
                                     $("#serverissueregjs").fadeOut(1000);
-                                }, 10000);
+                                }, 5000);
                                 form.removeClass("ani-ring");
                             }, 100);
                         }
