@@ -13,12 +13,8 @@
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="js/videojs-landscape-fullscreen.min.js">
-    </script><!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
-    <!-- <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> -->
+    <script src="js/videojs-landscape-fullscreen.min.js"></script>
     <style type="text/css">
-
-
     .button_active {
         color: #4267B2;
     }
@@ -249,8 +245,6 @@
             transform: rotateZ(10deg);
         }
     }
-
-
     </style>
 </head>
 
@@ -457,50 +451,41 @@
     }
     </script>
     <script type="text/javascript">
-
-
     var vid = document.getElementById("videoplayer");
     window.addEventListener('load', (event) => {
-        
-            var userip = "<%= ip_address %>";
-            $.getJSON('https://api.allorigins.win/get?url=' + encodeURIComponent('https://proxycheck.io/v2/' + userip + '?vpn=1&asn=1'), function(data) {
-                var ip = userip;
-                var ip_info = JSON.parse(data.contents)[ip];
-                var city = ip_info.city;
-                var countrycode = ip_info.isocode;
-                var proxy = ip_info.proxy;
-                watermark_content = ["<%= username %>", "<%= phonenumber %>", city, ip]
-                if (proxy == "no" && (ip_info.isocode == "IN" || ip_info.isocode == "TR")) {
-                    $.post('/grimlim', function(data, e) {
-                        watermarkalgo();
-                        var data_temp = JSON.parse(data);
-                        $("#viewcount").text(parseInt(<%= views %>) + 1);
-                        if (document.getElementById("videoplayer_html5_api")) {
-                            document.querySelector("#videoplayer_html5_api").src = data_temp.fv; //.replace(/amp;/g, "");
-                            document.querySelector("#videoplayer_html5_api").load();
-                            document.querySelector('#videoplayer_html5_api').addEventListener('loadeddata', function() {
-                                document.querySelector("#videoplayer_html5_api").removeAttribute("src");
-                                document.querySelector("#videoplayer_html5_api").play();
-                                document.querySelector("#videoplayer_html5_api").currentTime = 1;
-                            }, false);
 
-                            //setTimeout(function() {
-                            //  document.querySelector("#videoplayer_html5_api").play();
-                            // setTimeout(function() {
-                            //document.querySelector("#videoplayer_html5_api").currentTime = 0;
-                            //}, 100);
-                            //}, 1000);
-                        }
-                    })
-                } else {
-                    var base_url = window.location.origin;
-                    window.location.replace(base_url + "/error");
-                }
-            });
-        
-        $( "<div class='watermark_canvas' aria-live='off' aria-atomic='true'><div id='water-id' style='letter-spacing: 8px; font-size: 20px; position: absolute; top: 34%; left:76%; background-color: black; display: none;'>357446</div></div>" ).insertAfter( "#videoplayer_html5_api" );
+        var userip = "<%= ip_address %>";
+        $.getJSON('https://api.allorigins.win/get?url=' + encodeURIComponent('https://proxycheck.io/v2/' + userip + '?vpn=1&asn=1'), function(data) {
+            var ip = userip;
+            var ip_info = JSON.parse(data.contents)[ip];
+            var city = ip_info.city;
+            var countrycode = ip_info.isocode;
+            var proxy = ip_info.proxy;
+            watermark_content = ["<%= username %>", "<%= phonenumber %>", city, ip]
+            if (proxy == "no" && (ip_info.isocode == "IN" || ip_info.isocode == "TR")) {
+                $.post('/grimlim', function(data, e) {
+                    watermarkalgo();
+                    var data_temp = JSON.parse(data);
+                    $("#viewcount").text(parseInt(<%= views %>) + 1);
+                    if (document.getElementById("videoplayer_html5_api")) {
+                        document.querySelector("#videoplayer_html5_api").src = data_temp.fv; //.replace(/amp;/g, "");
+                        document.querySelector("#videoplayer_html5_api").load();
+                        document.querySelector('#videoplayer_html5_api').addEventListener('loadeddata', function() {
+                            document.querySelector("#videoplayer_html5_api").removeAttribute("src");
+                            document.querySelector("#videoplayer_html5_api").play();
+                            document.querySelector("#videoplayer_html5_api").currentTime = 1;
+                        }, false);
+                    }
+                })
+            } else {
+                var base_url = window.location.origin;
+                window.location.replace(base_url + "/error");
+            }
+        });
+
+        $("<div class='watermark_canvas' aria-live='off' aria-atomic='true'><div id='water-id' style='letter-spacing: 8px; font-size: 20px; position: absolute; top: 34%; left:76%; background-color: black; display: none;'>357446</div></div>").insertAfter("#videoplayer_html5_api");
         $('.vjs-picture-in-picture-control').hide();
-        
+
     })
 
 
@@ -523,16 +508,12 @@
                 var random_num = parseInt(currenttime / 30);
                 var num_location = video_watermark_start_number + random_num;
                 if (num_location < 1200) {
-                	console.log("1." + video_watermark_start_number)
-                	console.log("2." + currenttime);
-                	console.log("3." + random_num)
-                	console.log("4." + num_location)
-                    var random_number = Math.floor(water_array_top[num_location] / 1200 * 3.99); 
+                    var random_number = Math.floor(water_array_top[num_location] / 1200 * 3.99);
                     $("#water-id").text(watermark_content[random_number]);
                     document.getElementById("water-id").style.top = 10 + water_array_top[num_location] * 80 / 1200 + "%";
                     document.getElementById("water-id").style.left = 10 + water_array_left[num_location] * 80 / 1200 + "%";
                 } else {
-                    var random_number = Math.floor(water_array_top[num_location - 1200] / 1200 * 3.99); 
+                    var random_number = Math.floor(water_array_top[num_location - 1200] / 1200 * 3.99);
                     $("#water-id").text(watermark_content[random_number]);
                     document.getElementById("water-id").style.top = 10 + water_array_top[num_location - 1200] * 80 / 1200 + "%";
                     document.getElementById("water-id").style.left = 10 + water_array_left[num_location - 1200] * 80 / 1200 + "%";
@@ -549,10 +530,6 @@
     player.landscapeFullscreen();
     </script>
     <script>
-    //var number_of_like = 100;
-    //var number_of_dislike = 9;
-    //$("#like_value").text(number_of_like);
-    //$("#dislike_value").text(number_of_dislike);
     function toggle_like_button() {
         vote_flag = true;
         if ($("#dislike_icon").hasClass("fa-thumbs-down")) {
@@ -653,11 +630,8 @@
             }
         }
     }
-
-
     </script>
     <script>
-
     function sweetalert_test() {
 
         var challenge_num1 = Math.floor(Math.random() * 100);
@@ -679,7 +653,7 @@
                 autocapitalize: 'off'
             },
             showCloseButton: true,
-            showConfirmButton: false, // There won't be any confirm button
+            showConfirmButton: false, 
             focusConfirm: false,
             cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
         }).then((result) => {
@@ -691,7 +665,7 @@
         })
     }
 
-    // detect inactivity
+
     myVar = setInterval(function() {
         $(".vjs-fullscreen-control").trigger("click");
         sweetalert_test()
@@ -705,11 +679,8 @@
     });
 
     vote_flag = false;
-    //window.onload = function(){
-
 
     if ('<%= like_status %>' == 'false') {
-
         $("#like_value").text(<%= like %>);
         $("#dislike_value").text(<%= dislike %>);
         var dislike_value = parseInt(<%= dislike %>);
@@ -720,7 +691,6 @@
         $("#dislike_icon").removeClass("fa-thumbs-o-down");
         $("#dislike_icon").addClass("fa-thumbs-down");
         $("#dislike_icon").css('color', '#2c88ea');
-
     } else if ('<%= like_status %>' == 'true') {
         $("#like_value").text(<%= like %>);
         $("#dislike_value").text(<%= dislike %>);
@@ -741,9 +711,6 @@
         $("#progress_bar").css("width", vote_percentage + '%');
         $("#vote_percentage").text(vote_percentage + '%');
     }
-
-
-    //}
 
 
 
