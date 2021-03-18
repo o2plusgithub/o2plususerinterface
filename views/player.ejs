@@ -498,7 +498,7 @@
                 }
             });
         
-        $("#videoplayer").append("<div class='watermark_canvas' aria-live='off' aria-atomic='true'><div id='water-id' style='letter-spacing: 8px; font-size: 20px; position: absolute; top: 34%; left:76%; background-color: black; display: none;'>357446</div></div>");
+        $( "<div class='watermark_canvas' aria-live='off' aria-atomic='true'><div id='water-id' style='letter-spacing: 8px; font-size: 20px; position: absolute; top: 34%; left:76%; background-color: black; display: none;'>357446</div></div>" ).insertAfter( "#videoplayer_html5_api" );
         $('.vjs-picture-in-picture-control').hide();
         
     })
