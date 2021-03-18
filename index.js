@@ -47,23 +47,23 @@ app.use(session({
 app.use(expressip().getIpInfoMiddleware);
 app.set('view engine', 'ejs');
 
-//app.use(
-//  helmet({
-//    contentSecurityPolicy: false,
-//  })
-//);
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 
 
 
 app.use(express.static(__dirname + '/views'));
 
-//app.use(function(req, res, next) {
-//    if (req.headers['x-forwarded-proto'] !== 'https') {
-//        return res.status(404).render('website_error.ejs');
-//    } else {
-//        next();
-//    }
-//})
+app.use(function(req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.status(404).render('website_error.ejs');
+    } else {
+        next();
+    }
+})
 
 
 var user_details_server = new Schema({
@@ -112,10 +112,10 @@ var subjectlist_model = connect2.model('subjectlist_model', subjectlist_server);
 
 
 app.get('/registration_page', function(req, res) {
-	var sess = req.session;
+    var sess = req.session;
     if (true) {
-    	sess.unique_id = "qazwsxed2";
-    	// remember to modify uniqueids
+        sess.unique_id = "qazwsxed2";
+        // remember to modify uniqueids
         res.render("registration.ejs");
     } else {
         res.render("error.ejs");
@@ -200,15 +200,15 @@ async function reg_verify_deviceid_username(unique_id, username, phonenumber) {
 }
 
 app.get('/first_time_registration', function(req, res) {
-	res.render("first_time_registration.ejs")
+    res.render("first_time_registration.ejs")
 })
 
 
 app.get('/login_page', function(req, res) {
-	var sess = req.session;
+    var sess = req.session;
     if (true) {
-    	sess.unique_id = "qazwsxed2";
-    	// remember to modify uniqueids
+        sess.unique_id = "qazwsxed2";
+        // remember to modify uniqueids
         res.render("login.ejs");
     } else {
         res.render("error.ejs");
@@ -246,13 +246,20 @@ app.post('/login', urlencodedParser, function(req, res) {
                     sess.points = result.points;
                     sess.rank = result.rank;
                     sess.tokencode = cryptr.encrypt(sess.username + moment().format("DDMMYYYY"));
-                    updatevalue({ username: sess.username, unique_id: sess.unique_id }, { logincount: sess.logincount + 1 });
-                    if (sess.userblocked == true){
-                    	var response_result = { form_ver: 'valid pswd', form_redirect: 'first_time_registration' };
-                    	res.end(JSON.stringify(response_result));
+                    if (sess.userblocked == true) {
+                        var response_result = { form_ver: 'valid pswd', form_redirect: 'first_time_registration' };
+                        res.end(JSON.stringify(response_result));
                     } else {
-                    	var response_result = { form_ver: 'valid pswd', form_redirect: 'home' };
-                    	res.end(JSON.stringify(response_result));
+                        sess.logincount = sess.logincount + 1;
+                        user_details_model.aggregate([{ $match: { points: { $gte: sess.points } } }, { $count: "user_ranking" }]).exec(function(err, result) {
+                            sess.rank = result[0].user_ranking;
+                            updatevalue({ username: sess.username, unique_id: sess.unique_id }, { logincount: sess.logincount, rank: result[0].user_ranking });
+                            user_details_model.count({}, function(err, count) {
+                                sess.total_users = count;
+                                var response_result = { form_ver: 'valid pswd', form_redirect: 'home' };
+                                res.end(JSON.stringify(response_result));
+                            })
+                        })
                     }
                 } else if (response.username == result.username && response.password == result.password && response.unique_id != result.unique_id) {
                     var response_result = { form_ver: 'dup device', form_redirect: '' };
@@ -310,6 +317,203 @@ async function updatevalue(search_value, newupdatevalue) {
     return resultfinal;
 }
 
+
+app.get('/home', function(req, res) {
+    var sess = req.session;
+    if (true) {
+        var response = { username: sess.username, phonenumber: sess.phonenumber, phonestate: sess.phoneverified, userblocked: sess.userblocked, branch: sess.branch, lec_quality: sess.lec_quality, rank: sess.rank, total_users: sess.total_users };
+        console.log(response)
+        res.render('home.ejs', response);
+    } else {
+        res.render("error.ejs");
+    }
+});
+
+app.get('/lecture', function(req, res) {
+    var sess = req.session;
+    if (true) {
+        res.render(sess.branch + '_subjectlist.ejs');
+    } else {
+        res.render('error.ejs')
+    }
+})
+
+app.get('/playlist', function(req, res) {
+    var sess = req.session;
+    if (true) {
+        sess.subject = req.query.subject;
+        res.render('playlist.ejs');
+    } else {
+        res.render('error.ejs');
+    }
+})
+
+app.post('/playlist_info', urlencodedParser, async function(req, res) {
+    var sess = req.session;
+    if (true) {
+        var response_code = { branch: sess.branch, subject: sess.subject };
+        var query_code = { lec_num: 1, lec_name: 1 }
+        subjectlist_model.find(response_code, query_code).sort({ $natural: -1 }).exec(function(err, result) {
+            console.log(result);
+            res.send(JSON.stringify(result));
+        })
+    }
+})
+
+//////
+
+app.get('/player', function(req, res) {
+    var sess = req.session;
+    if (true) {
+        sess.lec_num = req.query.lec_num;
+        var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
+        subjectlist_model.findOne(response_code, { lec_name: 1, sublike: 1, subdislike: 1, views: 1, playlist: 1 }, function(err, data) {
+            if (err) { console.log(err); };
+            sess.sublike = data.sublike;
+            sess.subdislike = data.subdislike;
+            sess.views = data.views;
+            ytpl(data.playlist).then(info => {
+                video_url = info.items[0].shortUrl;
+                video_url_name = info.items[0].title;
+                video_url_id = getVideoId(info.items[0].shortUrl).id;
+                ytdl.getInfo(video_url_id).then(info_data => {
+
+                    vid_container = [];
+                    for (var i = 0; i < info_data.formats.length; i++) {
+                        if (info_data.formats[i].hasVideo == true && info_data.formats[i].hasAudio == true) {
+                            vid_container.push(info_data.formats[i]);
+                        }
+                        if (i == info_data.formats.length - 1) {
+                            let formatv = vid_container[0];
+                            let formata = vid_container[0];
+                            sess.videolink = formatv.url;
+                            sess.audiolink = formata.url;
+                            console.log(sess);
+                        }
+                    }
+
+                    var ip_address = sess.useripinfo.ip;
+
+                    if (sess.like.includes(sess.subject + ':' + sess.lec_num)) {
+                        var like_status = true;
+                        res.render('player.ejs', { ip_address: ip_address, username: sess.username, phonenumber: sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                    } else if (sess.dislike.includes(sess.subject + ':' + sess.lec_num)) {
+                        var like_status = false;
+                        res.render('player.ejs', { ip_address: ip_address, username: sess.username, phonenumber: sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                    } else {
+                        var like_status = '';
+                        res.render('player.ejs', { ip_address: ip_address, username: sess.username, phonenumber: sess.phonenumber, branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num, lec_name: data.lec_name, like: data.sublike, dislike: data.subdislike, like_status: like_status, views: data.views });
+                    }
+                }).catch(error => { console.log(error); return error });
+            }).catch(error => { console.log(error); return error });
+        })
+    } else {
+        res.render('error.ejs');
+    }
+})
+
+
+app.post('/grimlim', urlencodedParser, function(req, res) {
+    var sess = req.session;
+    if (true) {
+        var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
+        subjectlist_model.findOneAndUpdate(response_code, { $set: { "views": sess.views + 1 } }, { new: true }, function(err, data) {
+            if (err) { console.log(err); }
+            sess.views = sess.views + 1;
+            console.log(data);
+        })
+        var response_code = { fv: sess.videolink, fa: sess.audiolink };
+        res.send(JSON.stringify(response_code));
+    }
+})
+
+
+app.post('/player_comment_preload', urlencodedParser, function(req, res) {
+    var sess = req.session;
+    if (true) {
+        var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
+        subjectlist_model.findOne(response_code, { comments: 1 }, function(err, data) {
+            if (err) {
+                console.log(err);
+            } else {
+                var data_temp = data.comments;
+                res.send(JSON.stringify(data_temp));
+            }
+        })
+    }
+})
+
+app.post('/player_comment', urlencodedParser, function(req, res) {
+    var sess = req.session;
+    if (true) {
+        var response_code = { branch: sess.branch, subject: sess.subject, lec_num: sess.lec_num };
+        var comment_temp = { commentor: sess.username, rank: sess.rank, commentor_msg: req.body.comment_msg };
+        subjectlist_model.findOne(response_code, { comments: 1 }, function(err, data) {
+            var data_temp = data.comments;
+            if (data_temp.length < 50) {
+                data_temp.push(comment_temp);
+            } else {
+                data_temp.pop(comment_temp);
+                data_temp.push(comment_temp);
+            }
+            subjectlist_model.findOneAndUpdate(response_code, { $set: { comments: data_temp } }, { new: true }, function(err, data) {
+                res.send(JSON.stringify(comment_temp));
+            })
+        })
+    }
+})
+
+
+
+
+
+app.post('/vote', urlencodedParser, function(req, res) {
+    var sess = req.session;
+    if (true) {
+        if (req.body.vote == "") {
+            pull(sess.dislike, sess.subject + ':' + sess.lec_num);
+            pull(sess.like, sess.subject + ':' + sess.lec_num);
+            sess.sublike = req.body.like_value;
+            sess.subdislike = req.body.dislike_value;
+            user_details_model.findOneAndUpdate({ "username": sess.username }, { $set: { "like": sess.like, "dislike": sess.dislike } }, { new: true }, function(err, data) {
+                console.log(data);
+            })
+            subjectlist_model.findOneAndUpdate({ "branch": sess.branch, "subject": sess.subject, "lec_num": sess.lec_num }, { $set: { "sublike": req.body.like_value, "subdislike": req.body.dislike_value } }, { new: true }, function(err, data) {
+                console.log(data);
+            })
+            res.send(JSON.stringify({ like: sess.like, dislike: sess.dislike, sublike: sess.sublike, subdislike: sess.subdislike }));
+        }
+
+        if (req.body.vote == "true") {
+            pull(sess.dislike, sess.subject + ':' + sess.lec_num);
+            sess.like.push(sess.subject + ':' + sess.lec_num);
+            sess.sublike = req.body.like_value;
+            sess.subdislike = req.body.dislike_value;
+            user_details_model.findOneAndUpdate({ "username": sess.username }, { $set: { "like": sess.like, "dislike": sess.dislike } }, { new: true }, function(err, data) {
+                console.log(data);
+            })
+            subjectlist_model.findOneAndUpdate({ "branch": sess.branch, "subject": sess.subject, "lec_num": sess.lec_num }, { $set: { "sublike": req.body.like_value, "subdislike": req.body.dislike_value } }, { new: true }, function(err, data) {
+                console.log(data);
+            })
+            res.send(JSON.stringify({ like: sess.like, dislike: sess.dislike, sublike: sess.sublike, subdislike: sess.subdislike }));
+        }
+
+        if (req.body.vote == "false") {
+            pull(sess.like, sess.subject + ':' + sess.lec_num);
+            sess.dislike.push(sess.subject + ':' + sess.lec_num);
+            sess.sublike = req.body.like_value;
+            sess.subdislike = req.body.dislike_value;
+            user_details_model.findOneAndUpdate({ "username": sess.username }, { $set: { "like": sess.like, "dislike": sess.dislike } }, { new: true }, function(err, data) {
+                console.log(data);
+            })
+            subjectlist_model.findOneAndUpdate({ "branch": sess.branch, "subject": sess.subject, "lec_num": sess.lec_num }, { $set: { "sublike": req.body.like_value, "subdislike": req.body.dislike_value } }, { new: true }, function(err, data) {
+                console.log(data);
+            })
+            res.send(JSON.stringify({ like: sess.like, dislike: sess.dislike, sublike: sess.sublike, subdislike: sess.subdislike }));
+        }
+    }
+
+})
 
 
 

@@ -42,6 +42,7 @@
         <p style="text-align: center; font-size:.9em; color:#ce352c; display: none;" id="nouserjs"> Username not found !!! </p>
         <p style="text-align: center; font-size:.9em; color:#ce352c; display: none;" id="duplogjs"> Duplicate login found !!! </p>
         <p style="text-align: center; font-size:.9em; color:#ce352c; display: none;" id="serverissueloginjs"> Server issue, Please try again !!! </p>
+        <p style="text-align: center; font-size:.9em; color:green; display: none;" id="validpswdjs"> Logging user. Please wait !!! </p>
         <div class="form-group mt-10">
             <input type="checkbox" data-role="checkbox" data-caption="Remember me" class="place-right">
             <button class="button">Login</button>
@@ -91,6 +92,7 @@
                     }, 100);
                 } else {
                     if (data_json.form_ver == 'valid pswd') {
+                        $("#validpswdjs").fadeIn(300);
                         window.location.replace(data_json.form_redirect)
                     } else {
                         document.getElementById("loginjs").reset();
