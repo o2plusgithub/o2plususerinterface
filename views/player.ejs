@@ -523,9 +523,10 @@
                 var random_num = parseInt(currenttime / 30);
                 var num_location = video_watermark_start_number + random_num;
                 if (num_location < 1200) {
-                	console.log(currenttime);
-                	console.log(random_num)
-                	console.log(num_location)
+                	console.log("1." + video_watermark_start_number)
+                	console.log("2." + currenttime);
+                	console.log("3." + random_num)
+                	console.log("4." + num_location)
                     var random_number = Math.floor(water_array_top[num_location] / 1200 * 3.99); 
                     $("#water-id").text(watermark_content[random_number]);
                     document.getElementById("water-id").style.top = 10 + water_array_top[num_location] * 80 / 1200 + "%";
