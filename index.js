@@ -206,6 +206,7 @@ app.get('/first_time_registration', function(req, res) {
 
 app.get('/login_page', function(req, res) {
     var sess = req.session;
+    sess.useripinfo = req.ipInfo;
     if (true) {
         sess.unique_id = "qazwsxed2";
         // remember to modify uniqueids
