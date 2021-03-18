@@ -518,7 +518,7 @@
             if (((document.querySelector("#videoplayer_html5_api").currentTime % 30) <= 10) && (document.querySelector("#videoplayer_html5_api").currentTime > 25)) {
                 $("#water-id").show();
                 var videoduration = document.getElementById("videoplayer_html5_api").duration;
-                var video_watermark_start_number = videoduration % 1200;
+                var video_watermark_start_number = Math.floor(videoduration) % 1200;
                 var currenttime = document.getElementById("videoplayer_html5_api").currentTime;
                 var random_num = parseInt(currenttime / 30);
                 var num_location = video_watermark_start_number + random_num;
