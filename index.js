@@ -25,7 +25,7 @@ var app = express();
 var store = new MongoDBStore({
     uri: 'mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/userSessions?retryWrites=true&w=majority',
     collection: 'userSessions',
-    expires: 1000 * 60 * 60 * 24 * 30, // expire in mongo 4hrs
+    expires: 1000 * 60 * 60 * 5, // expire in mongo 5 hrs
 });
 
 // Catch errors
