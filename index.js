@@ -22,6 +22,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var useragent = require('express-useragent');
 
 var app = express();
+app.use(useragent.express());
 
 var store = new MongoDBStore({
     uri: 'mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/userSessions?retryWrites=true&w=majority',
