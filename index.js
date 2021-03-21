@@ -19,6 +19,7 @@ const ytdl = require('ytdl-core');
 var ytpl = require('ytpl');
 const getVideoId = require('get-video-id');
 var MongoDBStore = require('connect-mongodb-session')(session);
+var useragent = require('express-useragent');
 
 var app = express();
 
@@ -113,6 +114,7 @@ var subjectlist_model = connect2.model('subjectlist_model', subjectlist_server);
 
 app.get('/registration_page', function(req, res) {
     var sess = req.session;
+    console.log(req.useragent);
     if (true) {
         sess.unique_id = "qazwsxed2";
         // remember to modify uniqueids
