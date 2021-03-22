@@ -55,25 +55,13 @@ app.use(session({
 app.use(expressip().getIpInfoMiddleware);
 app.set('view engine', 'ejs');
 
-
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
 
 app.use(express.static(__dirname + '/views'));
-
-app.use(function(error, req, res, next) {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-        console.log("ADMIN : No HTTPS. Connection Refused.")
-        return res.status(500);
-    } else {
-        if (error){
-            console.log('ADMIN : Server issue found !!!')
-            console.log(error.toString())
-            res.render("error.ejs");
-            return res.status(500);
-        } else {
-            next();
-        }
-    }
-})
 
 
 var user_details_server = new Schema({
@@ -120,11 +108,9 @@ var subjectlist_server = new Schema({
 var connect2 = mongoose.createConnection('mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/subjectlistdetails?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false });
 var subjectlist_model = connect2.model('subjectlist_model', subjectlist_server);
 
-app.get('/', function(req, res) {
-    res.send('Online');    
-})
 
 app.get('/registration_page', function(req, res) {
+    throw new Error('Something broke!')
     var sess = req.session;
     sess.browser_validity = req.useragent.source;
     var token = JSON.parse(cryptr.decrypt(req.query.token));
