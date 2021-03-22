@@ -140,7 +140,6 @@ app.get('/registration_page', function(req, res) {
         var past_time = token.timestamp;
         var present_time = moment().format('x');
         var time_diff = present_time - past_time;
-        console.log(time_diff);
         if (sess.user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes('Gecko/87.0')) {
             res.render("registration.ejs");
         } else {
@@ -166,25 +165,18 @@ app.get('/registration_page', function(req, res) {
 app.post('/registration', urlencodedParser, function(req, res) {
     var sess = req.session;
     if (true) {
-        var response = { username: req.body.username, password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0 };
-        reg_verify_deviceid_username(sess.unique_id, req.body.username, req.body.phonenumber).then(function(result) {
-            if (result) {
-                if (result.dupname || result.dupdev || result.dupphone) {
-                    var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: false };
-                    res.end(JSON.stringify(response_result));
-                } else {
-                    user_details_model.create(response, function(err, result) {
-                        if (err) {
-                            console.log(err);
-                            var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: false };
-                            res.end(JSON.stringify(response_result));
-                        } else {
-                            var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: true };
-                            res.end(JSON.stringify(response_result));
-                        }
-                    })
-                } /**/
-            }
+        var response = { username: req.body.username, password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0, block_reason: "Nil" };
+        user_details_model.create(response, function(err, result) {
+            if (err) {
+                var error_json = err.keyPattern;
+                var error_key = Object.keys(error_json);
+                var response_result = { form_dupname: "username" == error_key, form_dupdev: "unique_id" == error_key , form_dupphone: "phonenumber" == error_key , form_success: false };
+                console.log(response_result);
+                res.end(JSON.stringify(response_result));
+            } //else {
+              //  var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: true };
+              //  res.end(JSON.stringify(response_result));
+            //}
         })
     } else {
         var response_result = { form_dupname: false, form_dupdev: true, form_dupphone: false, form_success: false };
