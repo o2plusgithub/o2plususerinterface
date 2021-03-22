@@ -23,6 +23,8 @@ var useragent = require('express-useragent');
 const TelegramBot = require('node-telegram-bot-api');
 const token = '1652999404:AAGVjn296VY7nx9v7KQK0k-Tq3xcWepcbm0';
 var server = 1;
+var telegram_bot_error = '1150704639';
+
 
 const bot = new TelegramBot(token, { polling: true });
 
@@ -128,12 +130,12 @@ app.get('/registration_page', function(req, res) {
     try {
         var sess = req.session;
         sess.browser_validity = req.useragent.source;
+        sess.user_country = req.ipInfo.country;
         var token = JSON.parse(cryptr.decrypt(req.query.token));
         sess.unique_id = token.unique_id;
         sess.user_ip = token.user_ip;
         sess.user_city = token.user_city;
         sess.user_state = token.user_state;
-        sess.user_country = req.ipInfo.country;
         sess.build_product = token.build_product;
         sess.build_model = token.build_model;
         sess.build_manufacturer = token.build_manufacturer;
@@ -151,11 +153,11 @@ app.get('/registration_page', function(req, res) {
         var err_response_user = "__Error User__ : " + sess.unique_id;
         var err_message = "__Error MSG__ : " + err;
         var err_location = "__Error Location__ : registration_page on server " + server;
-        bot.sendMessage('1504299199', err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
+        bot.sendMessage(telegram_bot_error, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
             console.log('ADMIN updated about error !!!')
         }).catch(function(error) {
             if (error.response && error.response.statusCode === 403) {
-                console.log("ADMIN is not connected to o2plusadmin_bot !!!");
+                console.log("ADMIN is not connected to o2plus_error_bot !!!");
             }
         });
         res.render("error.ejs");
@@ -163,73 +165,58 @@ app.get('/registration_page', function(req, res) {
 });
 
 app.post('/registration', urlencodedParser, function(req, res) {
-    var sess = req.session;
-    if (true) {
-        var response = { username: req.body.username, password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0, block_reason: "Nil" };
-        user_details_model.create(response, function(err, result) {
-            if (err) {
-                var error_json = err.keyPattern;
-                var error_key = Object.keys(error_json);
-                var response_result = { form_dupname: "username" == error_key, form_dupdev: "unique_id" == error_key , form_dupphone: "phonenumber" == error_key , form_success: false };
-                console.log(response_result);
-                res.end(JSON.stringify(response_result));
-            } //else {
-              //  var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: true };
-              //  res.end(JSON.stringify(response_result));
-            //}
-        })
-    } else {
-        var response_result = { form_dupname: false, form_dupdev: true, form_dupphone: false, form_success: false };
+    try {
+        var sess = req.session;
+        sess.browser_validity = req.useragent.source;
+        sess.user_country = req.ipInfo.country;
+        if (sess.user_country == "IN" && sess.browser_validity.includes('Gecko/87.0')) {
+            var response = { username: req.body.username, password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0, block_reason: "Nil" };
+            user_details_model.create(response, function(err, result) {
+                if (err) {
+                    if (error.code === 11000) {
+                        var error_json = err.keyPattern;
+                        var error_key = Object.keys(error_json);
+                        var response_result = { form_dupname: "username" == error_key, form_dupdev: "unique_id" == error_key, form_dupphone: "phonenumber" == error_key, form_success: false };
+                        console.log(response_result);
+                        res.end(JSON.stringify(response_result));
+                    }
+                } else {
+                    var username_update = "__Username__ : " + req.username;
+                    var unique_id_update = "__Unique ID__ : " + sess.unique_id;
+                    var user_state_update = "__State__ : " + sess.user_state;
+                    bot.sendMessage('1150704639', username_update + "\r\n" + unique_id_update + "\r\n" + user_state_update).then(function(resp) {
+                        console.log('ADMIN informed about new User !!!')
+                    }).catch(function(error) {
+                        if (error.response && error.response.statusCode === 403) {
+                            console.log("ADMIN is not connected to o2plus_newuser_bot !!!");
+                        }
+                    });
+                    var response_result = { form_dupname: false, form_dupdev: false, form_dupphone: false, form_success: true };
+                    res.end(JSON.stringify(response_result));
+                }
+            })
+        } else {
+            var response_result = { form_dupname: false, form_dupdev: false, form_dupphone: false, form_success: false };
+            res.end(JSON.stringify(response_result));
+        }
+    } catch {
+        console.log('Error in /registration route by user : ' + sess.unique_id + ' on server ' + server);
+        console.log(err);
+        var err_response_user = "__Error User__ : " + sess.unique_id;
+        var err_message = "__Error MSG__ : " + err;
+        var err_location = "__Error Location__ : registration on server " + server;
+        bot.sendMessage(telegram_bot_error, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
+            console.log('ADMIN updated about error !!!')
+        }).catch(function(error) {
+            if (error.response && error.response.statusCode === 403) {
+                console.log("ADMIN is not connected to o2plus_error_bot !!!");
+            }
+        });
+        var response_result = { form_dupname: false, form_dupdev: false, form_dupphone: false, form_success: false };
         res.end(JSON.stringify(response_result));
     }
 })
 
-async function reg_verify_deviceid_username(unique_id, username, phonenumber) {
-    let promise1 = new Promise((resolve, reject) => {
-        user_details_model.countDocuments({ "username": username }, function(err, c) {
-            if (err) {
-                console.log(err);
-                resolve(false)
-            } else {
-                if (c >= 1) { resolve(true) } else { resolve(false) }
-            }
-        })
-    }).catch(error => {
-        console.log(error)
-        resolve(false)
-    })
-    let promise2 = new Promise((resolve, reject) => {
-        user_details_model.countDocuments({ "unique_id": unique_id }, function(err, c) {
-            if (err) {
-                console.log(err);
-                resolve(false)
-            } else {
-                if (c >= 1) { resolve(true) } else { resolve(false) }
-            }
-        })
-    }).catch(error => {
-        console.log(error)
-        resolve(false)
-    })
-    let promise3 = new Promise((resolve, reject) => {
-        user_details_model.countDocuments({ "phonenumber": phonenumber }, function(err, c) {
-            if (err) {
-                console.log(err);
-                resolve(false)
-            } else {
-                if (c >= 1) { resolve(true) } else { resolve(false) }
-            }
-        })
-    }).catch(error => {
-        console.log(error)
-        resolve(false)
-    })
-    let resultfinal1 = await promise1;
-    let resultfinal2 = await promise2;
-    let resultfinal3 = await promise3;
-    var dup_response = { dupname: resultfinal1, dupdev: resultfinal2, dupphone: resultfinal3 };
-    return dup_response;
-}
 
 app.get('/first_time_registration', function(req, res) {
     res.render("first_time_registration.ejs")
