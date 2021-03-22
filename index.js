@@ -28,8 +28,8 @@ var telegram_admin = '1150704639';
 
 
 
-const error_bot = new TelegramBot(token, { polling: true });
-const new_reg_bot = new TelegramBot(token, { polling: true });
+const error_bot = new TelegramBot(error_token, { polling: true });
+const new_reg_bot = new TelegramBot(new_reg_token, { polling: true });
 
 var app = express();
 app.use(useragent.express());
