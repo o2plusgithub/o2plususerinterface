@@ -20,6 +20,10 @@ var ytpl = require('ytpl');
 const getVideoId = require('get-video-id');
 var MongoDBStore = require('connect-mongodb-session')(session);
 var useragent = require('express-useragent');
+const TelegramBot = require('node-telegram-bot-api');
+const token = '1652999404:AAGVjn296VY7nx9v7KQK0k-Tq3xcWepcbm0';
+
+const bot = new TelegramBot(token, {polling: true});
 
 var app = express();
 app.use(useragent.express());
@@ -128,6 +132,7 @@ app.get('/registration_page', function(req, res) {
         console.log(time_diff);
         if (user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
             res.render("registration.ejs");
+            bot.sendMessage('1504299199', 'You have reached registration page!!!');
         } else {
             res.render("error.ejs");
         }
