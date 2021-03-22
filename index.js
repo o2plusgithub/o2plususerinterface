@@ -132,7 +132,13 @@ app.get('/registration_page', function(req, res) {
         console.log(time_diff);
         if (sess.user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
             res.render("registration.ejs");
-            bot.sendMessage('1504299199', 'You have reached registration page!!!');
+            bot.sendMessage('1504299199',  'You have reached registration page!!!').then(function(resp) {
+                console.log("user : " + sess.unique_id + " is connected to o2plusadmin_bot");
+            }).catch(function(error) {
+                if (error.response && error.response.statusCode === 403) {
+                    console.log("user : " + sess.unique_id + " is not connected to o2plusadmin_bot");
+                }
+            });
         } else {
             res.render("error.ejs");
         }
