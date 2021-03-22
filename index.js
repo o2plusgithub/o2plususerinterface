@@ -223,7 +223,24 @@ app.post('/registration', urlencodedParser, function(req, res) {
 
 
 app.get('/first_time_registration', function(req, res) {
-    res.render("first_time_registration.ejs")
+    try {
+        var sess = req.session;
+        res.render("first_time_registration.ejs");
+    } catch {
+        console.log('Error in /first_time_registration by user : ' + sess.unique_id + ' on server ' + server);
+        console.log(err);
+        var err_response_user = "__Error User__ : " + sess.unique_id;
+        var err_message = "__Error MSG__ : " + err;
+        var err_location = "__Error Location__ : first_time_registration on server " + server;
+        error_bot.sendMessage(telegram_admin, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
+            console.log('ADMIN updated about error !!!')
+        }).catch(function(error) {
+            if (error.response && error.response.statusCode === 403) {
+                console.log("ADMIN is not connected to o2plus_error_bot !!!");
+            }
+        });
+        res.render("error.ejs");
+    }
 })
 
 
