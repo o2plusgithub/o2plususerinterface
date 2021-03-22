@@ -110,28 +110,29 @@ var subjectlist_model = connect2.model('subjectlist_model', subjectlist_server);
 
 
 app.get('/registration_page', function(req, res) {
-    throw new Error{
-        console.log('Something broke!')
-    }
-    var sess = req.session;
-    sess.browser_validity = req.useragent.source;
-    var token = JSON.parse(cryptr.decrypt(req.query.token));
-    sess.unique_id = token.unique_id;
-    sess.user_ip = token.user_ip;
-    sess.user_city = token.user_city;
-    sess.user_state = token.user_state;
-    sess.user_country = req.ipInfo.country;
-    sess.build_product = token.build_product;
-    sess.build_model = token.build_model;
-    sess.build_manufacturer = token.build_manufacturer;
-    var past_time = token.timestamp;
-    var present_time = moment().format('x');
-    var time_diff = present_time - past_time;
-    console.log(time_diff);
-    if (user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
-        res.render("registration.ejs");
-    } else {
-        res.render("error.ejs");
+    try {
+        var sess = req.session;
+        sess.browser_validity = req.useragent.source;
+        var token = JSON.parse(cryptr.decrypt(req.query.token));
+        sess.unique_id = token.unique_id;
+        sess.user_ip = token.user_ip;
+        sess.user_city = token.user_city;
+        sess.user_state = token.user_state;
+        sess.user_country = req.ipInfo.country;
+        sess.build_product = token.build_product;
+        sess.build_model = token.build_model;
+        sess.build_manufacturer = token.build_manufacturer;
+        var past_time = token.timestamp;
+        var present_time = moment().format('x');
+        var time_diff = present_time - past_time;
+        console.log(time_diff);
+        if (user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
+            res.render("registration.ejs");
+        } else {
+            res.render("error.ejs");
+        }
+    } catch (err) {
+        console.log('there is error');
     }
 });
 
