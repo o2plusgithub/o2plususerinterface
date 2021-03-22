@@ -51,6 +51,7 @@ app.use(session({
         maxAge: 3 * 60 * 60 * 1000
     }
 }));
+
 app.use(expressip().getIpInfoMiddleware);
 app.set('view engine', 'ejs');
 
@@ -121,11 +122,21 @@ var subjectlist_model = connect2.model('subjectlist_model', subjectlist_server);
 app.get('/registration_page', function(req, res) {
     var sess = req.session;
     var token = JSON.parse(cryptr.decrypt(req.query.token));
-    console.log(req.useragent);
-    console.log(token);
-    if (true) {
-        sess.unique_id = "qazwsxed2";
-        // remember to modify uniqueids
+    var browser_validity = req.useragent;
+    var unique_id = token.unique_id;
+    var user_ip = token.user_ip;
+    var user_city = token.user_city;
+    var user_state = token.user_state;
+    var user_country = req.ipInfo.country;
+    var build_product = token.build_product;
+    var build_model = token.build_model;
+    var build_manufacturer = token.build_manufacturer;
+    var past_time = token.timestamp;
+    var present_time = moment().format('x');
+    var time_diff = present_time - past_time;
+    console.log(browser_validity);
+    console.log(time_diff);
+    if (user_country == "IN") {
         res.render("registration.ejs");
     } else {
         res.render("error.ejs");
