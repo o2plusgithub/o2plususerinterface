@@ -24,7 +24,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '1652999404:AAGVjn296VY7nx9v7KQK0k-Tq3xcWepcbm0';
 var server = 1;
 
-const bot = new TelegramBot(token, {polling: true});
+const bot = new TelegramBot(token, { polling: true });
 
 var app = express();
 app.use(useragent.express());
@@ -131,23 +131,22 @@ app.get('/registration_page', function(req, res) {
         var present_time = moment().format('x');
         var time_diff = present_time - past_time;
         console.log(time_diff);
-        if (sess.user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
+        if (user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
             res.render("registration.ejs");
-            bot.sendMessage('1150704639',  'You have reached registration page!!!').then(function(resp) {
-                console.log("user : " + sess.unique_id + " is connected to o2plusadmin_bot");
-            }).catch(function(error) {
-                if (error.response && error.response.statusCode === 403) {
-                    var err_response = { user : sess.unique_id, error : "user is not connected to o2plusadmin_bot" , origin : "registration_page", server : server };
-                    console.log(err_response);
-                    console.log("user : " + sess.unique_id + " is not connected to o2plusadmin_bot");
-                }
-            });
         } else {
             res.render("error.ejs");
         }
     } catch (err) {
-        console.log('Error in /registration_page route');
+        console.log('Error in /registration_page route by user : ' + sess.unique_id + ' on server ' + server);
         console.log(err);
+        var err_response = { user: sess.unique_id, error: err, origin: "registration_page", server: server };
+        bot.sendMessage('1504299199', err_response).then(function(resp) {
+            console.log('ADMIN updated about error !!!')
+        }).catch(function(error) {
+            if (error.response && error.response.statusCode === 403) {
+                console.log("ADMIN is not connected to o2plusadmin_bot !!!");
+            }
+        });
         res.render("error.ejs");
     }
 });
