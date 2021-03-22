@@ -132,7 +132,9 @@ app.get('/registration_page', function(req, res) {
             res.render("error.ejs");
         }
     } catch (err) {
-        console.log('there is error');
+        console.log('Error in /registration_page route');
+        console.log(err);
+        res.render("error.ejs");
     }
 });
 
