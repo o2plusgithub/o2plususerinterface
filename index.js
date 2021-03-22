@@ -70,7 +70,10 @@ app.use(express.static(__dirname + '/views'));
 
 
 var user_details_server = new Schema({
-    username: String,
+    username: {
+        type: String,
+        unique: true
+    },
     password: String,
     branch: String,
     phonenumber: Number,
@@ -80,10 +83,11 @@ var user_details_server = new Schema({
     video_watch_hour: Number,
     logincount: Number,
     lec_quality: String,
+    points: Number,
+    rank: Number,
     like: { type: [String], default: undefined },
     dislike: { type: [String], default: undefined },
-    points: Number,
-    rank: Number
+    block_reason: String
 }, {
     collection: 'user_details'
 });
@@ -131,7 +135,7 @@ app.get('/registration_page', function(req, res) {
         var present_time = moment().format('x');
         var time_diff = present_time - past_time;
         console.log(time_diff);
-        if (user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
+        if (user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes('Gecko/87.0')) {
             res.render("registration.ejs");
         } else {
             res.render("error.ejs");
@@ -142,7 +146,7 @@ app.get('/registration_page', function(req, res) {
         var err_response_user = "__Error User__ : " + sess.unique_id;
         var err_message = "__Error MSG__ : " + err;
         var err_location = "__Error Location__ : registration_page on server " + server;
-        bot.sendMessage('1504299199', err_response_user + "\r\n\r\n" + err_message + "\r\n\r\n" + err_location).then(function(resp) {
+        bot.sendMessage('1504299199', err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
             console.log('ADMIN updated about error !!!')
         }).catch(function(error) {
             if (error.response && error.response.statusCode === 403) {
@@ -164,6 +168,10 @@ app.post('/registration', urlencodedParser, function(req, res) {
                     res.end(JSON.stringify(response_result));
                 } else {
                     user_details_model.create(response, function(err, result) {
+                        user_details_model.create(response, function(err1, result1){
+                            console.log(err1);
+                            console.log(result1);
+                        }
                         if (err) {
                             console.log(err);
                             var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: false };
