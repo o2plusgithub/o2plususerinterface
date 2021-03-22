@@ -22,6 +22,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var useragent = require('express-useragent');
 const TelegramBot = require('node-telegram-bot-api');
 const token = '1652999404:AAGVjn296VY7nx9v7KQK0k-Tq3xcWepcbm0';
+var server = 1;
 
 const bot = new TelegramBot(token, {polling: true});
 
@@ -136,6 +137,8 @@ app.get('/registration_page', function(req, res) {
                 console.log("user : " + sess.unique_id + " is connected to o2plusadmin_bot");
             }).catch(function(error) {
                 if (error.response && error.response.statusCode === 403) {
+                    var err_response = { user : sess.unique_id, error : "user is not connected to o2plusadmin_bot" , origin : "registration_page", server : server };
+                    console.log(err_response);
                     console.log("user : " + sess.unique_id + " is not connected to o2plusadmin_bot");
                 }
             });
