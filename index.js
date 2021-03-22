@@ -260,7 +260,7 @@ app.get('/login_page', function(req, res) {
         var past_time = token.timestamp;
         var present_time = moment().format('x');
         var time_diff = present_time - past_time;
-        if (user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes('Gecko/87.0')) {
+        if (sess.user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes('Gecko/87.0')) {
             res.render("login.ejs");
         } else {
             res.render("error.ejs");
