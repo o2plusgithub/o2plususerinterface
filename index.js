@@ -228,13 +228,39 @@ app.get('/first_time_registration', function(req, res) {
 
 
 app.get('/login_page', function(req, res) {
-    var sess = req.session;
-    sess.useripinfo = req.ipInfo;
-    if (true) {
-        sess.unique_id = "qazwsxed2";
-        // remember to modify uniqueids
-        res.render("login.ejs");
-    } else {
+    try {
+        var sess = req.session;
+        sess.browser_validity = req.useragent.source;
+        sess.user_country = req.ipInfo.country;
+        var token = JSON.parse(cryptr.decrypt(req.query.token));
+        sess.unique_id = token.unique_id;
+        sess.user_ip = token.user_ip;
+        sess.user_city = token.user_city;
+        sess.user_state = token.user_state;
+        sess.build_product = token.build_product;
+        sess.build_model = token.build_model;
+        sess.build_manufacturer = token.build_manufacturer;
+        var past_time = token.timestamp;
+        var present_time = moment().format('x');
+        var time_diff = present_time - past_time;
+        if (user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes('Gecko/87.0')) {
+            res.render("login.ejs");
+        } else {
+            res.render("error.ejs");
+        }
+    } catch (err) {
+        console.log('Error in /login_page route by user : ' + sess.unique_id + ' on server ' + server);
+        console.log(err);
+        var err_response_user = "__Error User__ : " + sess.unique_id;
+        var err_message = "__Error MSG__ : " + err;
+        var err_location = "__Error Location__ : login_page on server " + server;
+        error_bot.sendMessage(telegram_admin, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
+            console.log('ADMIN updated about error !!!')
+        }).catch(function(error) {
+            if (error.response && error.response.statusCode === 403) {
+                console.log("ADMIN is not connected to o2plus_error_bot !!!");
+            }
+        });
         res.render("error.ejs");
     }
 });
