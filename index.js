@@ -189,7 +189,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
                     var unique_id_update = "__Unique ID__ : " + sess.unique_id;
                     var user_state_update = "__State__ : " + sess.user_state;
                     new_reg_bot.sendMessage(telegram_admin, username_update + "\r\n" + unique_id_update + "\r\n" + user_state_update).then(function(resp) {
-                        console.log('ADMIN informed about new User !!!')
+                        console.log('ADMIN informed about new User ' + req.body.username + '!!!')
                     }).catch(function(error) {
                         if (error.response && error.response.statusCode === 403) {
                             console.log("ADMIN is not connected to o2plus_newuser_bot !!!");
