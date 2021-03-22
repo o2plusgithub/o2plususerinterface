@@ -185,7 +185,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
                         res.end(JSON.stringify(response_result));
                     }
                 } else {
-                    var username_update = "__Username__ : " + req.username;
+                    var username_update = "__Username__ : " + req.body.username;
                     var unique_id_update = "__Unique ID__ : " + sess.unique_id;
                     var user_state_update = "__State__ : " + sess.user_state;
                     new_reg_bot.sendMessage(telegram_admin, username_update + "\r\n" + unique_id_update + "\r\n" + user_state_update).then(function(resp) {
