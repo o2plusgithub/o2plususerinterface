@@ -174,6 +174,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
             user_details_model.create(response, function(err, result) {
                 if (err) {
                     if (error.code === 11000) {
+                        // duplicate 
                         var error_json = err.keyPattern;
                         var error_key = Object.keys(error_json);
                         var response_result = { form_dupname: "username" == error_key, form_dupdev: "unique_id" == error_key, form_dupphone: "phonenumber" == error_key, form_success: false };
