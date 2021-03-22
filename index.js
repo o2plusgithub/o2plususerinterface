@@ -136,7 +136,7 @@ app.get('/registration_page', function(req, res) {
     var time_diff = present_time - past_time;
     console.log(browser_validity);
     console.log(time_diff);
-    if (user_country == "IN") {
+    if (user_country == "IN" && time_diff <= 10000 && browser_validity.source.includes('Gecko/87.0')) {
         res.render("registration.ejs");
     } else {
         res.render("error.ejs");
