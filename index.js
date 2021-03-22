@@ -21,12 +21,15 @@ const getVideoId = require('get-video-id');
 var MongoDBStore = require('connect-mongodb-session')(session);
 var useragent = require('express-useragent');
 const TelegramBot = require('node-telegram-bot-api');
-const token = '1652999404:AAGVjn296VY7nx9v7KQK0k-Tq3xcWepcbm0';
 var server = 1;
-var telegram_bot_error = '1150704639';
+const error_token = '1782210941:AAFRkjqpt-JCOks0BB-p0JBFR2JxTtB9K1A';
+const new_reg_token = '1718850510:AAHPKAsagMSmHBx_PShALGH0Yp6S3UZVPDw';
+var telegram_admin = '1150704639';
 
 
-const bot = new TelegramBot(token, { polling: true });
+
+const error_bot = new TelegramBot(token, { polling: true });
+const new_reg_bot = new TelegramBot(token, { polling: true });
 
 var app = express();
 app.use(useragent.express());
@@ -153,7 +156,7 @@ app.get('/registration_page', function(req, res) {
         var err_response_user = "__Error User__ : " + sess.unique_id;
         var err_message = "__Error MSG__ : " + err;
         var err_location = "__Error Location__ : registration_page on server " + server;
-        bot.sendMessage(telegram_bot_error, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
+        error_bot.sendMessage(telegram_admin, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
             console.log('ADMIN updated about error !!!')
         }).catch(function(error) {
             if (error.response && error.response.statusCode === 403) {
@@ -185,7 +188,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
                     var username_update = "__Username__ : " + req.username;
                     var unique_id_update = "__Unique ID__ : " + sess.unique_id;
                     var user_state_update = "__State__ : " + sess.user_state;
-                    bot.sendMessage('1150704639', username_update + "\r\n" + unique_id_update + "\r\n" + user_state_update).then(function(resp) {
+                    new_reg_bot.sendMessage(telegram_admin, username_update + "\r\n" + unique_id_update + "\r\n" + user_state_update).then(function(resp) {
                         console.log('ADMIN informed about new User !!!')
                     }).catch(function(error) {
                         if (error.response && error.response.statusCode === 403) {
@@ -206,7 +209,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
         var err_response_user = "__Error User__ : " + sess.unique_id;
         var err_message = "__Error MSG__ : " + err;
         var err_location = "__Error Location__ : registration on server " + server;
-        bot.sendMessage(telegram_bot_error, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
+        error_bot.sendMessage(telegram_admin, err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
             console.log('ADMIN updated about error !!!')
         }).catch(function(error) {
             if (error.response && error.response.statusCode === 403) {
