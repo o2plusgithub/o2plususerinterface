@@ -174,11 +174,6 @@ app.post('/registration', urlencodedParser, function(req, res) {
                     res.end(JSON.stringify(response_result));
                 } else {
                     user_details_model.create(response, function(err, result) {
-                        var response = { username: req.body.username + "1", password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0 };
-                        user_details_model.create(response, function(err1, result1){
-                            console.log(err1);
-                            console.log(result1);
-                        })
                         if (err) {
                             console.log(err);
                             var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: false };
