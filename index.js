@@ -71,6 +71,7 @@ app.use(function(error, req, res, next) {
         if (error){
             console.log('ADMIN : Server issue found !!!')
             console.log(error.toString())
+            res.render("error.ejs");
             return res.status(500);
         } else {
             next();
