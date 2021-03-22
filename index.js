@@ -171,7 +171,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
                         user_details_model.create(response, function(err1, result1){
                             console.log(err1);
                             console.log(result1);
-                        }
+                        })
                         if (err) {
                             console.log(err);
                             var response_result = { form_dupname: result.dupname, form_dupdev: result.dupdev, form_dupphone: result.dupphone, form_success: false };
