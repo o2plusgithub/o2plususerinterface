@@ -24,7 +24,7 @@
     "ytpl": "^2.0.5"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "NODE_ENV=production node index.js"
   },
   "author": "",
   "license": "ISC"

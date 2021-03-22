@@ -61,8 +61,6 @@ app.use(
     })
 );
 
-
-
 app.use(express.static(__dirname + '/views'));
 
 app.use(function(error, req, res, next) {
