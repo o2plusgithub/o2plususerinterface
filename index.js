@@ -76,9 +76,15 @@ var user_details_server = new Schema({
     },
     password: String,
     branch: String,
-    phonenumber: Number,
+    phonenumber: {
+        type: Number,
+        unique: true
+    },
     phoneverified: Boolean,
-    unique_id: String,
+    unique_id: {
+        type: String,
+        unique: true
+    },
     userblocked: Boolean,
     video_watch_hour: Number,
     logincount: Number,
