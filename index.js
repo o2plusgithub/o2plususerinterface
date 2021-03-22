@@ -115,7 +115,9 @@ var subjectlist_model = connect2.model('subjectlist_model', subjectlist_server);
 
 app.get('/registration_page', function(req, res) {
     var sess = req.session;
+    var token = JSON.parse(cryptr.decrypt(req.query.token));
     console.log(req.useragent);
+    console.log(token);
     if (true) {
         sess.unique_id = "qazwsxed2";
         // remember to modify uniqueids
