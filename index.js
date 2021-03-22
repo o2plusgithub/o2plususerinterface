@@ -139,9 +139,9 @@ app.get('/registration_page', function(req, res) {
     } catch (err) {
         console.log('Error in /registration_page route by user : ' + sess.unique_id + ' on server ' + server);
         console.log(err);
-        var err_response_user = "Error User : " + sess.unique_id;
-        var err_message = "Error MSG : " + err;
-        var err_location = "Error Location : registration_page on server " + server;
+        var err_response_user = "__Error User__ : " + sess.unique_id;
+        var err_message = "__Error MSG__ : " + err;
+        var err_location = "__Error Location__ : registration_page on server " + server;
         bot.sendMessage('1504299199', "\r\n" + err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
             console.log('ADMIN updated about error !!!')
         }).catch(function(error) {
