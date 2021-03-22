@@ -65,11 +65,18 @@ app.use(
 
 app.use(express.static(__dirname + '/views'));
 
-app.use(function(req, res, next) {
+app.use(function(error, req, res, next) {
     if (req.headers['x-forwarded-proto'] !== 'https') {
-        return res.status(404).render('website_error.ejs');
+        console.log("ADMIN : No HTTPS. Connection Refused.")
+        return res.status(500);
     } else {
-        next();
+        if (error){
+            console.log('ADMIN : Server issue found !!!')
+            console.log(error.toString())
+            return res.status(500);
+        } else {
+            next();
+        }
     }
 })
 
@@ -121,26 +128,25 @@ var subjectlist_model = connect2.model('subjectlist_model', subjectlist_server);
 
 app.get('/registration_page', function(req, res) {
     var sess = req.session;
+    sess.browser_validity = req.useragent.source;
     var token = JSON.parse(cryptr.decrypt(req.query.token));
-    var browser_validity = req.useragent;
-    var unique_id = token.unique_id;
-    var user_ip = token.user_ip;
-    var user_city = token.user_city;
-    var user_state = token.user_state;
-    var user_country = req.ipInfo.country;
-    var build_product = token.build_product;
-    var build_model = token.build_model;
-    var build_manufacturer = token.build_manufacturer;
+    sess.unique_id = token.unique_id;
+    sess.user_ip = token.user_ip;
+    sess.user_city = token.user_city;
+    sess.user_state = token.user_state;
+    sess.user_country = req.ipInfo.country;
+    sess.build_product = token.build_product;
+    sess.build_model = token.build_model;
+    sess.build_manufacturer = token.build_manufacturer;
     var past_time = token.timestamp;
     var present_time = moment().format('x');
     var time_diff = present_time - past_time;
     console.log(time_diff);
-    if (user_country == "TR" && time_diff <= 10000 && browser_validity.source.includes('Gecko/87.0')) {
+    if (user_country == "IN" && time_diff <= 10000 && sess.browser_validity.includes('Gecko/87.0')) {
         res.render("registration.ejs");
     } else {
         res.render("error.ejs");
     }
-
 });
 
 app.post('/registration', urlencodedParser, function(req, res) {
