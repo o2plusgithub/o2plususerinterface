@@ -142,7 +142,7 @@ app.get('/registration_page', function(req, res) {
         var err_response_user = "__Error User__ : " + sess.unique_id;
         var err_message = "__Error MSG__ : " + err;
         var err_location = "__Error Location__ : registration_page on server " + server;
-        bot.sendMessage('1504299199', "\r\n" + err_response_user + "\r\n" + err_message + "\r\n" + err_location).then(function(resp) {
+        bot.sendMessage('1504299199', err_response_user + "\r\n\r\n" + err_message + "\r\n\r\n" + err_location).then(function(resp) {
             console.log('ADMIN updated about error !!!')
         }).catch(function(error) {
             if (error.response && error.response.statusCode === 403) {
