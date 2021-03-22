@@ -176,7 +176,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
             var response = { username: req.body.username, password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0, block_reason: "Nil" };
             user_details_model.create(response, function(err, result) {
                 if (err) {
-                    if (error.code === 11000) {
+                    if (err.code === 11000) {
                         // duplicate 
                         var error_json = err.keyPattern;
                         var error_key = Object.keys(error_json);
