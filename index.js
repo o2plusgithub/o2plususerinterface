@@ -27,7 +27,12 @@ app.use(useragent.express());
 var store = new MongoDBStore({
     uri: 'mongodb+srv://C6hivgPRCjxKGF9f:yW3c3fc8vpM0ego368z80271RCH@o2plusdatabase.vwl00.mongodb.net/userSessions?retryWrites=true&w=majority',
     collection: 'userSessions',
-    expires: 1000 * 60 * 60 * 5, // expire in mongo 5 hrs
+    expires: 1000 * 60 * 60 * 24, // expire in mongo 24 hrs
+    connectionOptions: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 10000
+    }
 });
 
 // Catch errors
@@ -50,9 +55,9 @@ app.use(expressip().getIpInfoMiddleware);
 app.set('view engine', 'ejs');
 
 app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  })
+    helmet({
+        contentSecurityPolicy: false,
+    })
 );
 
 
