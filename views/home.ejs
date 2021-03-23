@@ -402,7 +402,6 @@
             $('#application_status').val('Approved');
             $('#application_status').css('color', 'green');
         }
-
         $('#branchbox').width($('#phonebox').width());
         $('#branchbox').height($('#phonebox').height());
         $('#qualitybox').width($('#phonebox').width());
@@ -411,10 +410,7 @@
     });
 
 
-    async function start() {
-        await document.body.requestFullscreen();
-        await screen.orientation.lock("landscape");
-    }
+
 
 
     function readFile() {
