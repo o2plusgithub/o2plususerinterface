@@ -238,7 +238,7 @@
         <br><br>
         <input readonly style="display: inline; width: 60%; font-size: 15px;" id="telegramph" value="Telegram : +1 4156891242"><button id="whatsappidbtn" type="button" class="button" onclick="copytelegram('telegramph')" style="width: 30%; margin-left: 15px; display: inline;">copy</button>
     </div>
-    <div class="container emp-profile" style="width:100%; position: relative; top:55px" id="web_container">
+    <div class="container emp-profile" style="width:100%; position: relative; top:35px" id="web_container">
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
@@ -253,7 +253,7 @@
                 <div class="profile-head">
                     <h5 id="username_tophead"> </h5>
                     <h6><strong> Status : <span id="student_level"> </span> </strong></h6>
-                    <p class="proile-rating" >RANKING : <span id="rank"></span></p>
+                    <p class="proile-rating">RANKING : <span id="rank"></span></p>
                     <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
                 </div>
             </div>
@@ -391,9 +391,9 @@
         var rank = '<%= rank %>';
         var total_users = '<%= total_users %>';
         $("#rank").text(rank);
-        var percentile = rank/total_users;
-        var user_levels=['Bronze' , 'Silver', 'Ruby', 'Sapphire', 'Emerald', 'Gold', 'Diamond', 'Platinum'];
-        $("#student_level").text(user_levels[Math.round(percentile/0.125)]);
+        var percentile = rank / total_users;
+        var user_levels = ['Bronze', 'Silver', 'Ruby', 'Sapphire', 'Emerald', 'Gold', 'Diamond', 'Platinum'];
+        $("#student_level").text(user_levels[Math.round(percentile / 0.125)]);
         if (<%= userblocked %>) {
             $('#application_status').val('Under Review');
             $('#application_status').css('color', 'red');
