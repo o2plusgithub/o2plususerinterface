@@ -282,14 +282,6 @@ app.get('/login_page', function(req, res) {
     }
 });
 
-app.post('/visitorid', urlencodedParser, function(req, res) {
-    var sess = req.session;
-    sess.fingerprint = req.body.visitorId;
-    var response = { status: true };
-    console.log(sess);
-    res.send(JSON.stringify(response));
-})
-
 
 app.post('/login', urlencodedParser, function(req, res) {
     var sess = req.session;
