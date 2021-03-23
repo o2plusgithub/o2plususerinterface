@@ -406,8 +406,23 @@
         $('#branchbox').height($('#phonebox').height());
         $('#qualitybox').width($('#phonebox').width());
         $('#qualitybox').height($('#phonebox').height());
-        document.documentElement.requestFullScreen();
     });
+
+
+
+
+
+            var btn = document.getElementById("contact_admin-button");
+            
+            btn.addEventListener("click", function (event) {
+                
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+                
+            }, false);
 
 
 
