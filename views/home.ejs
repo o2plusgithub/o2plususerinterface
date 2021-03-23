@@ -407,7 +407,14 @@
         $('#branchbox').height($('#phonebox').height());
         $('#qualitybox').width($('#phonebox').width());
         $('#qualitybox').height($('#phonebox').height());
+        start();
     });
+
+
+    async function start() {
+        await document.body.requestFullscreen();
+        await screen.orientation.lock("landscape");
+    }
 
 
     function readFile() {
