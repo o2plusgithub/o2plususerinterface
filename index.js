@@ -22,8 +22,8 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var useragent = require('express-useragent');
 const TelegramBot = require('node-telegram-bot-api');
 var server = 1;
-const error_token = '1782210941:AAFRkjqpt-JCOks0BB-p0JBFR2JxTtB9K1A';
-const new_reg_token = '1718850510:AAHPKAsagMSmHBx_PShALGH0Yp6S3UZVPDw';
+const error_token = '1782210941:AAFCkpPQj_Dtuke0iPo5McguasWefmCkgMU';
+const new_reg_token = '1718850510:AAHRqMUD9tguJhvf2iysBpg8pCh-rCG-RLc';
 var telegram_admin = '1150704639';
 
 
