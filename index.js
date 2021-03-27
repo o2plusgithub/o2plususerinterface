@@ -21,7 +21,11 @@ const getVideoId = require('get-video-id');
 var MongoDBStore = require('connect-mongodb-session')(session);
 var useragent = require('express-useragent');
 const TelegramBot = require('node-telegram-bot-api');
+
+
+
 var server = 1;
+var browser_version = 'Gecko/78.0';
 const error_token = '1782210941:AAFCkpPQj_Dtuke0iPo5McguasWefmCkgMU';
 const new_reg_token = '1718850510:AAHRqMUD9tguJhvf2iysBpg8pCh-rCG-RLc';
 var telegram_admin = '1150704639';
@@ -145,7 +149,7 @@ app.get('/registration_page', function(req, res) {
         var past_time = token.timestamp;
         var present_time = moment().format('x');
         var time_diff = present_time - past_time;
-        if (sess.user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes('Gecko/87.0')) {
+        if (sess.user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes(browser_version)) {
             res.render("registration.ejs");
         } else {
             res.render("error.ejs");
@@ -172,7 +176,7 @@ app.post('/registration', urlencodedParser, function(req, res) {
         var sess = req.session;
         sess.browser_validity = req.useragent.source;
         sess.user_country = req.ipInfo.country;
-        if (sess.user_country == "IN" && sess.browser_validity.includes('Gecko/87.0')) {
+        if (sess.user_country == "IN" && sess.browser_validity.includes(browser_version)) {
             var response = { username: req.body.username, password: req.body.password, branch: req.body.branch, phonenumber: req.body.phonenumber, phoneverified: false, unique_id: sess.unique_id, userblocked: true, video_watch_hour: 0, lec_quality: "highest", logincount: 0, like: [], dislike: [], points: 0, rank: 0, block_reason: "Nil" };
             user_details_model.create(response, function(err, result) {
                 if (err) {
@@ -260,8 +264,7 @@ app.get('/login_page', function(req, res) {
         var past_time = token.timestamp;
         var present_time = moment().format('x');
         var time_diff = present_time - past_time;
-        console.log(sess.browser_validity)
-        if (sess.user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes('Gecko/87.0')) {
+        if (sess.user_country == "IN" && time_diff <= 5000 && sess.browser_validity.includes(browser_version)) {
             res.render("login.ejs");
         } else {
             res.render("error.ejs");
